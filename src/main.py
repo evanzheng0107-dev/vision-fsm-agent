@@ -25,29 +25,29 @@ from typing import Optional, Dict, Any  # 新增：类型提示
 pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.1
 
-# ===================== 优化后的MCP客户端类（核心修改） =====================
-# 配置日志（方便排查MCP交互问题）
+# ===================== 优化后的HIL客户端类（核心修改） =====================
+# 配置日志（方便排查HIL交互问题）
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler()]
 )
-mcp_logger = logging.getLogger("McpClient")
+hil_logger = logging.getLogger("HilClient")
 
-class McpClient:
+class HilClient:
     def __init__(self, config: Dict[str, Any]):
         # 修复：使用传入的config参数，提升灵活性
         self.config = config or {}
         self.server_url = self.config.get(
-            "mcp_server_url",
-            os.getenv("MCP_SERVER_URL", "http://localhost:8001/mcp")
+            "hil_server_url",
+            os.getenv("HIL_SERVER_URL", "http://localhost:8001/hil")
         )
         self.headers = {
             "Content-Type": "application/json",
-            "MCP-Version": "1.0"  # 新增：MCP协议版本标识
+            "HIL-Version": "1.0"  # 新增：HIL协议版本标识
         }
         self.script_id = self.config.get("script_id", "zhangsword_explore")  # 脚本唯一标识
-        mcp_logger.info(f"✅ MCP客户端初始化成功，服务地址：{self.server_url}")
+        hil_logger.info(f"✅ HIL客户端初始化成功，服务地址：{self.server_url}")
     
     def get_manual_correction(self) -> Optional[Dict[str, Any]]:
         """
@@ -70,21 +70,21 @@ class McpClient:
             )
             if response.status_code == 200:
                 correction = response.json()
-                # 新增：校验纠正指令格式是否符合MCP协议
+                # 新增：校验纠正指令格式是否符合HIL协议
                 if self._validate_correction(correction):
-                    mcp_logger.info(f"📥 获取到手动纠正指令：{correction}")
+                    hil_logger.info(f"📥 获取到手动纠正指令：{correction}")
                     return correction
                 else:
-                    mcp_logger.warning("❌ 手动纠正指令格式不符合MCP协议规范")
+                    hil_logger.warning("❌ 手动纠正指令格式不符合HIL协议规范")
         except requests.exceptions.Timeout:
-            mcp_logger.warning("⚠️ 获取手动纠正指令超时（MCP服务可能未启动）")
+            hil_logger.warning("⚠️ 获取手动纠正指令超时（HIL服务可能未启动）")
         except Exception as e:
-            mcp_logger.error(f"❌ 获取手动纠正指令失败：{str(e)}")
+            hil_logger.error(f"❌ 获取手动纠正指令失败：{str(e)}")
         return None
     
     def send_status(self, status: Dict[str, Any]) -> bool:
         """
-        发送结构化游戏状态到MCP服务（供agent分析场景）
+        发送结构化游戏状态到HIL服务（供agent分析场景）
         """
         try:
             # 新增：结构化payload，包含协议类型、脚本标识等
@@ -102,14 +102,14 @@ class McpClient:
                 timeout=2
             )
             if response.status_code == 200:
-                mcp_logger.debug(f"📤 游戏状态上报成功：{status['current_state']}")
+                hil_logger.debug(f"📤 游戏状态上报成功：{status['current_state']}")
                 return True
             else:
-                mcp_logger.warning(f"❌ 状态上报失败，状态码：{response.status_code}")
+                hil_logger.warning(f"❌ 状态上报失败，状态码：{response.status_code}")
         except requests.exceptions.Timeout:
-            mcp_logger.warning("⚠️ 状态上报超时（MCP服务可能未启动）")
+            hil_logger.warning("⚠️ 状态上报超时（HIL服务可能未启动）")
         except Exception as e:
-            mcp_logger.error(f"❌ 状态上报失败：{str(e)}")
+            hil_logger.error(f"❌ 状态上报失败：{str(e)}")
         return False
     
     def send_correction_to_agent(self, correction: Dict[str, Any]) -> bool:
@@ -132,12 +132,12 @@ class McpClient:
                 timeout=2
             )
             if response.status_code == 200:
-                mcp_logger.info("📤 手动纠正指令已发送给agent，等待学习优化...")
+                hil_logger.info("📤 手动纠正指令已发送给agent，等待学习优化...")
                 return True
             else:
-                mcp_logger.warning(f"❌ 发送纠正指令给agent失败，状态码：{response.status_code}")
+                hil_logger.warning(f"❌ 发送纠正指令给agent失败，状态码：{response.status_code}")
         except Exception as e:
-            mcp_logger.error(f"❌ 发送纠正指令失败：{str(e)}")
+            hil_logger.error(f"❌ 发送纠正指令失败：{str(e)}")
         return False
     
     def get_agent_decision(self, game_state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -159,12 +159,12 @@ class McpClient:
             )
             if response.status_code == 200:
                 decision = response.json()
-                mcp_logger.info(f"🌐 获取到agent学习后的决策：{decision['action']}")
+                hil_logger.info(f"🌐 获取到agent学习后的决策：{decision['action']}")
                 return decision
             else:
-                mcp_logger.warning(f"❌ 获取agent决策失败，状态码：{response.status_code}")
+                hil_logger.warning(f"❌ 获取agent决策失败，状态码：{response.status_code}")
         except Exception as e:
-            mcp_logger.error(f"❌ 获取agent决策失败：{str(e)}")
+            hil_logger.error(f"❌ 获取agent决策失败：{str(e)}")
         return None
     
     def _validate_correction(self, correction: Dict[str, Any]) -> bool:
@@ -178,15 +178,15 @@ class McpClient:
         required_fields = ["type", "action", "correct_params"]
         for field in required_fields:
             if field not in correction:
-                mcp_logger.warning(f"❌ 纠正指令缺少必填字段：{field}")
+                hil_logger.warning(f"❌ 纠正指令缺少必填字段：{field}")
                 return False
         # 确保坐标参数存在
         if correction["action"] == "click" and ("x" not in correction["correct_params"] or "y" not in correction["correct_params"]):
-            mcp_logger.warning("❌ 点击类纠正指令缺少x/y坐标参数")
+            hil_logger.warning("❌ 点击类纠正指令缺少x/y坐标参数")
             return False
         return True
 
-# ===================== 原有核心逻辑（无修改/仅适配MCP） =====================
+# ===================== 原有核心逻辑（无修改/仅适配HIL） =====================
 # 加载配置文件
 def load_config():
     # 可能的配置文件位置
@@ -511,7 +511,7 @@ class CloudDecisionAgent:
                     "reason": f"无目标，执行盲走探索（第{self.decision_count}次决策）"
                 }
 
-# ===================== 主循环逻辑（适配MCP优化） =====================
+# ===================== 主循环逻辑（适配HIL优化） =====================
 def main(auto_start=False):
     # 初始化配置
     config = load_config()
@@ -602,8 +602,8 @@ def main(auto_start=False):
     cloud_agent = CloudDecisionAgent()
     print("✅ 云端决策代理初始化成功！")
     
-    # 初始化优化后的MCP客户端
-    mcp_client = McpClient(config)  # 传入config参数，提升灵活性
+    # 初始化优化后的HIL客户端
+    hil_client = HilClient(config)  # 传入config参数，提升灵活性
     
     # 初始化失败次数
     failed_attempts = 0
@@ -632,16 +632,16 @@ def main(auto_start=False):
                         print("\n🛑 脚本已退出！")
                         exit(0)
             except:
-                # 如果不是交互式终端，等待MCP启动指令
-                correction = mcp_client.get_manual_correction()
+                # 如果不是交互式终端，等待HIL启动指令
+                correction = hil_client.get_manual_correction()
                 if correction and correction.get("action") == "start":
-                    print("\n🚀 收到MCP启动指令，脚本开始运行...")
+                    print("\n🚀 收到HIL启动指令，脚本开始运行...")
                     break
                 time.sleep(0.5)
     else:
         print("\n🚀 自动启动脚本...")
     
-    print("💡 提示：可以通过MCP服务发送手动纠正指令，格式：")
+    print("💡 提示：可以通过HIL服务发送手动纠正指令，格式：")
     print('{"type":"correct","action":"click","scene":"秘境入口","error_params":{"x":100,"y":200},"correct_params":{"x":150,"y":220},"reason":"坐标偏移导致点空"}')
     
     # 主循环
@@ -655,15 +655,15 @@ def main(auto_start=False):
                 print("\n🛑 检测到ESC键按下，脚本已停止！")
                 exit(0)
             
-            # ===================== MCP手动纠正核心逻辑（新增/修改） =====================
-            # 检查MCP手动纠正指令前再次检查ESC键
+            # ===================== HIL手动纠正核心逻辑（新增/修改） =====================
+            # 检查HIL手动纠正指令前再次检查ESC键
             if keyboard.is_pressed('esc'):
                 print("\n🛑 检测到ESC键按下，脚本已停止！")
                 exit(0)
             
-            correction = mcp_client.get_manual_correction()
+            correction = hil_client.get_manual_correction()
             if correction and correction.get("type") == "correct":
-                print(f"🎮 收到MCP手动纠正指令：{correction}")
+                print(f"🎮 收到HIL手动纠正指令：{correction}")
                 action = correction.get("action")
                 
                 # 执行手动纠正操作
@@ -692,14 +692,14 @@ def main(auto_start=False):
                     failed_attempts = 0
                 
                 # 核心新增：将手动纠正指令发送给agent，供agent学习
-                mcp_client.send_correction_to_agent(correction)
+                hil_client.send_correction_to_agent(correction)
                 
                 # 等待一段时间，避免连续执行相同指令
                 time.sleep(1.0)
                 continue
             elif correction and correction.get("type") == "none":
                 # 无纠正指令，不做处理，继续执行地图探索
-                mcp_logger.debug("ℹ️ 无MCP纠正指令，继续执行地图探索")
+                hil_logger.debug("ℹ️ 无HIL纠正指令，继续执行地图探索")
                 pass
             
             # ===================== 原有截图和状态检测逻辑 =====================
@@ -863,7 +863,7 @@ def main(auto_start=False):
                             time.sleep(walk_delay)
                             continue
             
-            # 构建结构化游戏状态（适配MCP协议）
+            # 构建结构化游戏状态（适配HIL协议）
             game_state = {
                 "current_state": "idle",
                 "match_results": {
@@ -881,8 +881,8 @@ def main(auto_start=False):
                 "window_region": config["window_region"]  # 新增：窗口区域信息，供agent参考
             }
             
-            # 发送结构化状态到MCP服务
-            mcp_client.send_status(game_state)
+            # 发送结构化状态到HIL服务
+            hil_client.send_status(game_state)
             
             # ===================== 获取agent学习后的决策（新增） =====================
             # 新增：每10次循环强制使用一次云端决策，确保云端决策功能能够被触发
@@ -891,8 +891,8 @@ def main(auto_start=False):
             if force_cloud_decision:
                 print(f"🔄 第{loop_count}次循环，强制使用云端决策...")
             
-            # 优先从MCP获取agent学习后的决策，无则使用原有云端决策
-            agent_decision = mcp_client.get_agent_decision(game_state) or cloud_agent.get_decision(game_state)
+            # 优先从HIL获取agent学习后的决策，无则使用原有云端决策
+            agent_decision = hil_client.get_agent_decision(game_state) or cloud_agent.get_decision(game_state)
             print(f"🌐 最终决策：{agent_decision['action']} - {agent_decision['reason']}")
             
             # 根据决策执行动作

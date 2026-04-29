@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-本项目构建了一个面向移动端游戏的智能自动化探索系统，通过计算机视觉技术识别游戏界面元素，结合有限状态机（FSM）进行智能决策，实现游戏的自动化探索。支持 MCP 手动纠正协议和云端智能决策，具备自适应学习能力。
+本项目构建了一个面向移动端游戏的智能自动化探索系统，通过计算机视觉技术识别游戏界面元素，结合有限状态机（FSM）进行智能决策，实现游戏的自动化探索。支持 HIL (Human-in-the-Loop) 手动纠正和云端智能决策，具备自适应学习能力。
 
 ## 核心功能
 
@@ -21,14 +21,14 @@
 - **BLIND_EXPLORE 状态**：无目标时随机探索
 - **WAIT 状态**：等待场景加载完成
 
-### 3. MCP 手动纠正协议
+### 3. HIL 手动纠正
 - **实时指令接收**：通过 RESTful API 接收手动纠正指令
 - **点击纠正**：支持坐标偏移纠正和目标点击纠正
 - **Agent 学习**：纠正指令自动发送给 Agent 进行学习优化
 
 ### 4. 云端决策集成
 - **本地/云端双模式**：支持本地决策和云端大模型决策
-- **状态上报**：定期上报游戏状态到 MCP 服务器
+- **状态上报**：定期上报游戏状态到 HIL 服务器
 - **智能分析**：基于历史数据的学习和优化
 
 ## 技术架构
@@ -62,7 +62,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                     决策层                                    │
 │  ┌────────────────┐          ┌────────────────┐            │
-│  │  MCP 手动纠正  │  ←────→  │  云端智能决策  │            │
+│  │  HIL 手动纠正  │  ←────→  │  云端智能决策  │            │
 │  └────────────────┘          └────────────────┘            │
 └─────────────────────────────────────────────────────────────┘
                               ↓
@@ -83,7 +83,7 @@
 | 窗口管理 | PyGetWindow | 0.0+ | 游戏窗口定位 |
 | 高性能截图 | mss | 9.0+ | 快速屏幕捕获 |
 | 配置管理 | PyYAML | 6.0+ | 项目配置管理 |
-| Web 服务 | Flask | 2.0+ | MCP 服务器 |
+| Web 服务 | Flask | 2.0+ | HIL 服务器 |
 | 网络请求 | Requests | 2.28+ | HTTP 客户端 |
 | 键盘监听 | keyboard | 0.13+ | ESC 终止快捷键 |
 
@@ -115,14 +115,14 @@ window_title: "雷电模拟器"
 window_region: [658, 34, 564, 1004]
 ```
 
-4. **启动 MCP 服务器（可选）**
+4. **启动 HIL 服务器（可选）**
 ```bash
-python scripts/mcp_server.py
+python run.py --hil
 ```
 
 5. **启动主程序**
 ```bash
-python scripts/main.py --start
+python run.py --start
 ```
 
 ### 快捷键
@@ -135,11 +135,12 @@ sword-legend-explorer/
 ├── assets/
 │   ├── samples/          # 样本图片（定位器、对话框等）
 │   └── templates/        # 模板图片（战斗按钮、拾取物品等）
-├── scripts/
+├── src/
 │   ├── main.py           # 主程序入口
-│   ├── mcp_server.py     # MCP 服务器
-│   ├── cloud_agent.py    # 云端决策 Agent
-│   ├── test_mcp.py       # MCP 测试脚本
+│   ├── mcp_server.py     # HIL 服务器
+│   └── cloud_agent.py    # 云端决策 Agent
+├── tests/
+│   ├── test_mcp.py       # HIL 测试脚本
 │   ├── test_config.py    # 配置测试脚本
 │   └── test_cloud_decision.py  # 云端决策测试
 ├── references/
@@ -174,26 +175,26 @@ scale_range: [0.6, 1.4]   # 缩放范围
 scale_steps: 10            # 缩放步数
 ```
 
-## MCP API 接口
+## HIL API 接口
 
 ### 获取纠正指令
 ```
-GET /mcp/get_correction
+GET /hil/get_correction
 ```
 
 ### 发送学习数据
 ```
-POST /mcp/send_correction
+POST /hil/send_correction
 ```
 
 ### 设置纠正指令（测试）
 ```
-POST /mcp/set_correction
+POST /hil/set_correction
 ```
 
 ### 获取服务状态
 ```
-GET /mcp/status
+GET /hil/status
 ```
 
 ## 核心解决痛点
@@ -205,9 +206,9 @@ GET /mcp/status
 
 ## Agent 协作与长链路推理
 
-### MCP 纠正协议工作流
+### HIL 纠正工作流
 ```
-用户设置纠正指令 → MCP 服务器接收 → 主程序获取指令
+用户设置纠正指令 → HIL 服务器接收 → 主程序获取指令
        ↓
 执行纠正操作 → 发送学习数据 → Agent 优化决策
 ```
@@ -232,14 +233,14 @@ GET /mcp/status
 
 ### 运行测试
 ```bash
-# 测试 MCP 服务
-python scripts/test_mcp.py
+# 测试 HIL 服务
+python tests/test_mcp.py
 
 # 测试配置
-python scripts/test_config.py
+python tests/test_config.py
 
 # 测试云端决策
-python scripts/test_cloud_decision.py
+python tests/test_cloud_decision.py
 ```
 
 ### 添加新模板

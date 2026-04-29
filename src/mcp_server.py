@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-MCP (Manual Correction Protocol) 服务器
+HIL (Human-in-the-Loop) 手动纠正服务器
 
 提供手动纠正指令的 API 接口，支持：
-- GET /get_correction - 获取用户的手动纠正指令
-- POST /send_correction - 发送纠正指令给 agent 学习
+- GET /hil/get_correction - 获取用户的手动纠正指令
+- POST /hil/send_correction - 发送纠正指令给 agent 学习
 
 运行方式：
-python mcp_server.py
+python hil_server.py
 
-服务将在 http://localhost:8001/mcp 启动
+服务将在 http://localhost:8001/hil 启动
 """
 
 from flask import Flask, request, jsonify
@@ -19,7 +19,7 @@ import time
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - MCP Server - %(levelname)s - %(message)s'
+    format='%(asctime)s - HIL Server - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ agent_learning_store = {
     "learning_history": []
 }
 
-@app.route('/mcp/get_correction', methods=['GET'])
+@app.route('/hil/get_correction', methods=['GET'])
 def get_correction():
     """
     获取用户的手动纠正指令
@@ -64,7 +64,7 @@ def get_correction():
         logger.error(f"获取纠正指令失败：{str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/mcp/send_correction', methods=['POST'])
+@app.route('/hil/send_correction', methods=['POST'])
 def send_correction():
     """
     发送纠正指令给 agent 学习
@@ -106,7 +106,7 @@ def send_correction():
         logger.error(f"发送纠正指令失败：{str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/mcp/set_correction', methods=['POST'])
+@app.route('/hil/set_correction', methods=['POST'])
 def set_correction():
     """
     设置手动纠正指令（测试用）
@@ -149,10 +149,10 @@ def set_correction():
         logger.error(f"设置纠正指令失败：{str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/mcp/status', methods=['GET'])
+@app.route('/hil/status', methods=['GET'])
 def get_status():
     """
-    获取 MCP 服务器状态
+    获取 HIL 服务器状态
     """
     try:
         status = {
@@ -168,13 +168,13 @@ def get_status():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    logger.info("MCP 服务器启动中...")
-    logger.info("服务将在 http://localhost:8001/mcp 可用")
+    logger.info("HIL 服务器启动中...")
+    logger.info("服务将在 http://localhost:8001/hil 可用")
     logger.info("API 接口：")
-    logger.info("- GET  /mcp/get_correction    - 获取纠正指令")
-    logger.info("- POST /mcp/send_correction   - 发送纠正指令给 agent")
-    logger.info("- POST /mcp/set_correction    - 设置纠正指令（测试）")
-    logger.info("- GET  /mcp/status           - 获取服务状态")
+    logger.info("- GET  /hil/get_correction    - 获取纠正指令")
+    logger.info("- POST /hil/send_correction   - 发送纠正指令给 agent")
+    logger.info("- POST /hil/set_correction    - 设置纠正指令（测试）")
+    logger.info("- GET  /hil/status           - 获取服务状态")
     
     # 启动服务器
     app.run(
