@@ -69,7 +69,33 @@ network (except the optional local HIL server). See
 [Safety Boundaries](#10-safety-boundaries) and
 [`docs/safety-boundaries.md`](docs/safety-boundaries.md).
 
-## 4. Quick Start
+## 4. Quick Demo
+
+**30 seconds to see the agent in action** — no game, no screen capture, no
+external software required:
+
+```bash
+git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
+cd sword-legend-explorer
+pip install -r requirements.txt
+python scripts/generate_demo_assets.py
+python demo_app/visual_grid_world.py --steps 20
+```
+
+Expected output (the agent navigates, collects items, presses buttons):
+
+```
+[demo] World: 12x12, goals=[(3, 2), (6, 5)], items=3, buttons=1
+  step   1 | fsm=IDLE  pos=(1, 1) | items[...] buttons[.]
+  ...
+  step  19 | fsm=IDLE  pos=(3,10) | items[III] buttons[B]
+[demo] All items collected and buttons pressed. Done!
+```
+
+> See [`docs/demo.md`](docs/demo.md) for a detailed walkthrough of what
+> each step does and how to configure the demo.
+
+## 5. Quick Start
 
 ```bash
 # 1. Clone
@@ -99,7 +125,7 @@ python run.py --start --steps 30 # specify step count
 python run.py --hil              # start the HIL correction server
 ```
 
-## 5. Demo Environment
+## 6. Demo Environment
 
 The demo (`demo_app/visual_grid_world.py`) is a **fully synthetic,
 headless, reproducible** environment:
@@ -132,7 +158,7 @@ Save frames as PNGs for inspection:
 python demo_app/visual_grid_world.py --save demo_frames --steps 20
 ```
 
-## 6. Architecture
+## 7. Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -173,7 +199,7 @@ python demo_app/visual_grid_world.py --save demo_frames --steps 20
 
 See [`docs/architecture.md`](docs/architecture.md) for a deep dive.
 
-## 7. FSM States
+## 8. FSM States
 
 The demo agent uses the following state machine:
 
@@ -189,7 +215,7 @@ The demo agent uses the following state machine:
 The FSM is fully configurable — see `src/main.py::build_demo_fsm()` and
 `src/fsm.py` for how to define your own topology.
 
-## 8. HIL Workflow
+## 9. HIL Workflow
 
 Human-in-the-Loop (HIL) lets a human **override** the agent in real time:
 
@@ -219,7 +245,7 @@ python run.py --hil
 
 See [`docs/hil-workflow.md`](docs/hil-workflow.md) for the full API.
 
-## 9. Testing
+## 10. Testing
 
 ```bash
 # Run the full test suite (no GUI, no network required)
@@ -240,7 +266,7 @@ The suite covers:
 CI runs automatically on every push and pull request via
 [GitHub Actions](.github/workflows/test.yml).
 
-## 10. Safety Boundaries
+## 11. Safety Boundaries
 
 > **This project is for local, controlled demo environments, research, and
 > education.**
@@ -260,7 +286,7 @@ CI runs automatically on every push and pull request via
 See [`docs/safety-boundaries.md`](docs/safety-boundaries.md) for full
 details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 
-## 11. Roadmap
+## 12. Roadmap
 
 ### v0.1.0 (current)
 - ✅ Core FSM + Vision + HIL framework
@@ -279,7 +305,7 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 - Performance benchmarking harness
 - Educational lab exercises
 
-## 12. Contributing
+## 13. Contributing
 
 Contributions are welcome! Please read [`CONTRIBUTING.md`](CONTRIBUTING.md)
 before opening a pull request.

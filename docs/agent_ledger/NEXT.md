@@ -6,31 +6,34 @@
 
 ## Current Stage
 
-Day 1 — README and demo clarity.
+Day 2 — Contributor experience and troubleshooting.
 
 ## Current Task
 
-Improve README Quick Demo visibility and add reproducible demo
-documentation.
+Improve contributor onboarding and add troubleshooting documentation.
 
 ## Acceptance Criteria
 
-- README includes a Quick Demo section with copy-paste commands
-- `docs/demo.md` exists with demo explanation and expected output
-- Demo command is documented and reproducible
+- `CONTRIBUTING.md` covers local development setup
+- `docs/troubleshooting.md` covers OpenCV, Windows, headless, pytest
+  common issues
+- PR template has safety checklist (verify, not add — should already exist)
+- README has a Development Setup section
 - `pytest tests/ -q` passes
 - `python scripts/oss_readiness_check.py` passes
-- `CHANGELOG.md` updated under `[Unreleased]`
-- No risky wording regression
+- `CHANGELOG.md` updated
 - `PROGRESS.md` updated
+- No risky wording regression
 
 ## Allowed Files
 
-- `README.md`
-- `docs/demo.md`
+- `CONTRIBUTING.md`
+- `docs/troubleshooting.md`
+- `README.md` (Development Setup section only)
 - `CHANGELOG.md`
 - `docs/agent_ledger/PROGRESS.md`
 - `docs/agent_ledger/NEXT.md`
+- `.github/PULL_REQUEST_TEMPLATE.md` (verify safety checklist exists)
 
 ## Forbidden Changes
 
@@ -40,12 +43,12 @@ documentation.
 - Do not modify `src/` code
 - Do not push or release
 
-## Next Round Prompt (after Day 1 completion)
+## Next Round Prompt (after Day 2 completion)
 
 ```
-/goal complete Day 2 contributor experience tasks for Vision FSM Agent:
-improve CONTRIBUTING, add troubleshooting documentation, update PR template
-safety checklist, update CHANGELOG and PROGRESS, run pytest and
-oss_readiness_check, ensure no risky wording regression, and leave git
-status clean or clearly report pending changes.
+/goal prepare v0.1.0 release materials for Vision FSM Agent: verify README,
+LICENSE, SECURITY, AGENTS, docs, examples, CI workflow, pytest, CHANGELOG,
+and safety boundaries; generate docs/releases/v0.1.0.md; update RELEASE_PLAN
+and PROGRESS; run oss_readiness_check; leave git status clean or clearly
+report pending changes.
 ```

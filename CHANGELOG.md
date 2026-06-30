@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **README Quick Demo section** - A 30-second "see it in action" section
+  with copy-paste commands and expected output, placed before Quick Start.
+- **docs/demo.md** - Detailed demo walkthrough: overview, prerequisites,
+  running options, expected output, step-by-step explanation, configuration,
+  saving frames, and troubleshooting tips.
 - **CODE_OF_CONDUCT.md** - Contributor Covenant 2.1 Code of Conduct.
 - **pyproject.toml** - PEP 621 project metadata, packaging config, pytest and
   coverage tool configuration. Enables pip install and PyPI publishing.

@@ -4,6 +4,52 @@
 
 ---
 
+## P002 — 2026-06-30 11:00
+
+### Completed
+
+- Added **Quick Demo** section to README (section 4), with 30-second
+  copy-paste commands and expected output. Renumbered subsequent sections
+  (5–13).
+- Created **docs/demo.md** — detailed demo walkthrough covering overview,
+  prerequisites, running options, expected output, step-by-step
+  explanation, configuration, saving frames, and troubleshooting.
+- Updated CHANGELOG `[Unreleased]` with Quick Demo and docs/demo.md.
+- Committed all prior work in 2 commits on branch
+  `refactor/vision-fsm-agent`:
+  - `a3dd112` refactor: rebrand to Vision FSM Agent
+  - `7648a13` docs: add maintenance ledger and enhance oss readiness check
+
+### Files Changed
+
+- `README.md` (added Quick Demo section, renumbered sections 5–13)
+- `docs/demo.md` (new)
+- `CHANGELOG.md` (updated [Unreleased])
+- `docs/agent_ledger/PROGRESS.md` (this entry)
+- `docs/agent_ledger/NEXT.md` (updated to Day 2)
+
+### Validation
+
+- pytest: **pass** (50 tests)
+- oss_readiness_check: **pass**
+- demo smoke test: **pass** (agent completes objectives)
+- risky wording scan: **pass**
+- git status: dirty (Day 1 changes uncommitted)
+
+### Notes
+
+- README now has 13 sections (was 12). Quick Demo is section 4, before
+  Quick Start (now section 5). This gives first-time visitors an
+  immediate "30 seconds to see it work" experience.
+- docs/demo.md includes a troubleshooting section that links forward to
+  the planned `docs/troubleshooting.md` (Day 2).
+
+### Next
+
+Day 2: Contributor experience and troubleshooting documentation.
+
+---
+
 ## P001 — 2026-06-30 10:30
 
 ### Completed
