@@ -1,0 +1,27 @@
+# CODEOWNERS for Vision FSM Agent
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Each line is a file pattern followed by one or more GitHub usernames/teams.
+# The last matching pattern has the most precedence.
+
+# Default owner for the entire repository
+*                           @evanzheng0107-dev
+
+# Core framework source
+/src/                       @evanzheng0107-dev
+/demo_app/                  @evanzheng0107-dev
+
+# Documentation and governance
+/README.md                  @evanzheng0107-dev
+/CHANGELOG.md               @evanzheng0107-dev
+/CONTRIBUTING.md            @evanzheng0107-dev
+/SECURITY.md                @evanzheng0107-dev
+/CODE_OF_CONDUCT.md         @evanzheng0107-dev
+/AGENTS.md                  @evanzheng0107-dev
+/docs/                      @evanzheng0107-dev
+
+# CI and GitHub configuration
+/.github/                   @evanzheng0107-dev
+
+# Tests
+/tests/                     @evanzheng0107-dev

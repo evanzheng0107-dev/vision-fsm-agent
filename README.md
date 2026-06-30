@@ -1,265 +1,295 @@
-# 杖剑传说 - 智能游戏探索 Agent
+# Vision FSM Agent
 
-基于有限状态机（FSM）和计算机视觉的《杖剑传说》游戏自动化探索智能体。
+> A lightweight Python framework for building computer-vision-driven automation agents with finite-state-machine control and human-in-the-loop correction.
 
-## 项目概述
+一个用于研究和教学的 **计算机视觉 + 有限状态机 + HIL 人工纠正** Agent 框架。
 
-本项目构建了一个面向移动端游戏的智能自动化探索系统，通过计算机视觉技术识别游戏界面元素，结合有限状态机（FSM）进行智能决策，实现游戏的自动化探索。支持 HIL (Human-in-the-Loop) 手动纠正和云端智能决策，具备自适应学习能力。
+[![Tests](https://github.com/evanzheng0107-dev/sword-legend-explorer/actions/workflows/test.yml/badge.svg)](https://github.com/evanzheng0107-dev/sword-legend-explorer/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
-## 核心功能
+---
 
-### 1. 视觉识别系统
-- **多尺度模板匹配**：支持 0.6-1.4 倍缩放范围，10 级缩放步数
-- **多模板识别**：支持 21+ 个定位器模板、2 个拾取物品模板、战斗按钮、对话框识别
-- **智能边缘检测**：自动检测定位器位置，触发地图拖动
+## Table of Contents
 
-### 2. 状态机架构
-- **IDLE 状态**：空闲扫描，检测各类游戏元素
-- **PICKUP 状态**：识别并自动拾取物品
-- **PATHFINDING 状态**：智能寻路，点击定位器触发移动
-- **BATTLE 状态**：自动点击战斗按钮
-- **BLIND_EXPLORE 状态**：无目标时随机探索
-- **WAIT 状态**：等待场景加载完成
+1. [What is this?](#1-what-is-this)
+2. [Who is it for?](#2-who-is-it-for)
+3. [What it is NOT for](#3-what-it-is-not-for)
+4. [Quick Start](#4-quick-start)
+5. [Demo Environment](#5-demo-environment)
+6. [Architecture](#6-architecture)
+7. [FSM States](#7-fsm-states)
+8. [HIL Workflow](#8-hil-workflow)
+9. [Testing](#9-testing)
+10. [Safety Boundaries](#10-safety-boundaries)
+11. [Roadmap](#11-roadmap)
+12. [Contributing](#12-contributing)
 
-### 3. HIL 手动纠正
-- **实时指令接收**：通过 RESTful API 接收手动纠正指令
-- **点击纠正**：支持坐标偏移纠正和目标点击纠正
-- **Agent 学习**：纠正指令自动发送给 Agent 进行学习优化
+---
 
-### 4. 云端决策集成
-- **本地/云端双模式**：支持本地决策和云端大模型决策
-- **状态上报**：定期上报游戏状态到 HIL 服务器
-- **智能分析**：基于历史数据的学习和优化
+## 1. What is this?
 
-## 技术架构
+**Vision FSM Agent** is a minimal, dependency-light framework that combines
+three classic automation building blocks:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      游戏窗口捕获层                            │
-│           ┌─────────────────────────────────────┐           │
-│           │  mss 截图 + OpenCV 图像预处理       │           │
-│           └─────────────────────────────────────┘           │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│                      视觉识别层                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │  战斗按钮识别 │  │  拾取物品识别 │  │  定位器识别   │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    有限状态机 (FSM)                           │
-│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌──────┐  │
-│  │  IDLE  │→│ PICKUP │→│ BATTLE │→│  PATH  │→│ WAIT │  │
-│  └────────┘  └────────┘  └────────┘  │FINDING │  └──────┘  │
-│              ┌────────┐               └────────┘            │
-│              │  BLIND │                                      │
-│              │ EXPLORE│                                      │
-│              └────────┘                                      │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│                     决策层                                    │
-│  ┌────────────────┐          ┌────────────────┐            │
-│  │  HIL 手动纠正  │  ←────→  │  云端智能决策  │            │
-│  └────────────────┘          └────────────────┘            │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│                     操作执行层                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │  PyAutoGUI   │  │  鼠标模拟点击 │  │  地图拖动   │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-```
+| Building block | Module | What it does |
+|---|---|---|
+| **Computer Vision** | `src/vision.py` | Multi-scale OpenCV template matching with configurable thresholds |
+| **Finite-State Machine** | `src/fsm.py` | Generic FSM with guards, actions, callbacks, and transition history |
+| **Human-in-the-Loop** | `src/hil_*.py` | HTTP-based correction channel so a human can override the agent in real time |
 
-## 核心技术栈
+These are wired together by a generic **agent loop** (`src/main.py`) that
+drives an **Environment** — an interface you can implement for any target.
+The project ships with a **synthetic demo environment** so you can run the
+entire pipeline with zero external setup.
 
-| 技术领域 | 技术选型 | 版本 | 用途 |
-|---------|---------|------|------|
-| 计算机视觉 | OpenCV | 4.5+ | 模板匹配、图像识别 |
-| 键鼠模拟 | PyAutoGUI | 0.9+ | 自动化操作模拟 |
-| 窗口管理 | PyGetWindow | 0.0+ | 游戏窗口定位 |
-| 高性能截图 | mss | 9.0+ | 快速屏幕捕获 |
-| 配置管理 | PyYAML | 6.0+ | 项目配置管理 |
-| Web 服务 | Flask | 2.0+ | HIL 服务器 |
-| 网络请求 | Requests | 2.28+ | HTTP 客户端 |
-| 键盘监听 | keyboard | 0.13+ | ESC 终止快捷键 |
+## 2. Who is it for?
 
-## 安装与配置
+- **Students and educators** learning about CV-based automation, FSM
+  design, or human-in-the-loop systems.
+- **Researchers** prototyping vision-driven agents in a reproducible,
+  controlled setting.
+- **Developers** who want a clean, readable starting point for building
+  their own CV+FSM automation — and want to understand every line.
 
-### 环境要求
-- Python 3.8+
-- Windows 操作系统
-- 支持安卓模拟器（如雷电模拟器）
+## 3. What it is NOT for
 
-### 快速开始
+> **Read this before using the project.**
 
-1. **克隆项目**
+This project is **not** intended for:
+
+- ❌ Cheating in games or circumventing anti-cheat systems
+- ❌ Botting or automating third-party services without permission
+- ❌ Bypassing platform rules, terms of service, or access controls
+- ❌ Any activity that violates applicable laws or regulations
+
+The default demo runs against a **local synthetic environment** — it does
+not capture your screen, send input to external software, or access the
+network (except the optional local HIL server). See
+[Safety Boundaries](#10-safety-boundaries) and
+[`docs/safety-boundaries.md`](docs/safety-boundaries.md).
+
+## 4. Quick Start
+
 ```bash
+# 1. Clone
 git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
 cd sword-legend-explorer
-```
 
-2. **安装依赖**
-```bash
+# 2. Create a virtual environment and install dependencies
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+
+# 3. Generate the synthetic demo assets (programmatic, no downloads)
+python scripts/generate_demo_assets.py
+
+# 4. Run the demo
+python demo_app/visual_grid_world.py --steps 20
 ```
 
-3. **配置游戏窗口**
+You should see the agent navigate a grid world, collect items, and press
+buttons — all driven by real template matching and FSM transitions.
 
-编辑 `config.yaml`，配置游戏窗口参数：
-```yaml
-window_title: "雷电模拟器"
-window_region: [658, 34, 564, 1004]
+### Using the launcher
+
+```bash
+python run.py --start            # demo mode (default)
+python run.py --start --steps 30 # specify step count
+python run.py --hil              # start the HIL correction server
 ```
 
-4. **启动 HIL 服务器（可选）**
+## 5. Demo Environment
+
+The demo (`demo_app/visual_grid_world.py`) is a **fully synthetic,
+headless, reproducible** environment:
+
+- A 12×12 grid world rendered to a BGR image with OpenCV/numpy
+- **Goals** (green crosshairs) — navigation targets
+- **Items** (gold circles) — collectibles
+- **Buttons** (blue squares) — interactable elements
+- An **agent** (red diamond) that moves, collects, and interacts
+
+Each frame is rendered using the **same drawing primitives** that
+generate the template images in `assets/demo/`. This guarantees that
+template matching actually finds the elements — making the demo a genuine
+end-to-end test of the vision pipeline.
+
+The world is **deterministic** given the same seed (`demo_seed: 42` by
+default), so runs are reproducible.
+
+```
+[demo] World: 12x12, goals=[(3, 2), (6, 5)], items=3, buttons=1
+  step   1 | fsm=IDLE  pos=(1, 1) | items[...] buttons[.]
+  ...
+  step  19 | fsm=IDLE  pos=(3,10) | items[III] buttons[B]
+[demo] All items collected and buttons pressed. Done!
+```
+
+Save frames as PNGs for inspection:
+
+```bash
+python demo_app/visual_grid_world.py --save demo_frames --steps 20
+```
+
+## 6. Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Environment Layer                        │
+│   ┌─────────────────────┐    ┌──────────────────────────┐   │
+│   │ DemoEnvironment     │    │ LiveEnvironment (opt.)   │   │
+│   │ (synthetic grid)    │    │ (screen capture + input) │   │
+│   └─────────────────────┘    └──────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ frame (np.ndarray)
+┌─────────────────────────────────────────────────────────────┐
+│                   Vision Layer (src/vision.py)               │
+│        Multi-scale template matching (OpenCV)                │
+│        TemplateManager → MatchResult[]                       │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ match results
+┌─────────────────────────────────────────────────────────────┐
+│                   FSM Layer (src/fsm.py)                      │
+│   IDLE ↔ MOVE ↔ PICKUP ↔ INTERACT ↔ WAIT ↔ EXPLORE         │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ events
+┌─────────────────────────────────────────────────────────────┐
+│                Decision Layer (src/agent.py)                  │
+│   ┌──────────────────┐      ┌──────────────────────┐        │
+│   │ LocalDecisionAgent│      │ CloudDecisionAgent   │        │
+│   │ (rule-based)      │      │ (LLM, optional)      │        │
+│   └──────────────────┘      └──────────────────────┘        │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ action
+┌─────────────────────────────────────────────────────────────┐
+│              HIL Layer (src/hil_client.py / hil_server.py)   │
+│        Human corrections over HTTP (Flask)                   │
+│        get_correction → apply → send_correction (learn)     │
+└─────────────────────────────────────────────────────────────┘
+                              ↓ action
+                      back to Environment
+```
+
+See [`docs/architecture.md`](docs/architecture.md) for a deep dive.
+
+## 7. FSM States
+
+The demo agent uses the following state machine:
+
+| State | Description | Entry event | Exit event |
+|-------|-------------|-------------|------------|
+| `IDLE` | Scanning for elements | (initial) | `FOUND_TARGET`, `FOUND_PICKUP`, `FOUND_INTERACT`, `NO_TARGET` |
+| `MOVE` | Navigating toward a goal | `FOUND_TARGET` | `ARRIVED`, `LOST_TARGET` |
+| `PICKUP` | Collecting an item | `FOUND_PICKUP` | `COLLECTED` |
+| `INTERACT` | Pressing a button | `FOUND_INTERACT` | `INTERACT_DONE` |
+| `WAIT` | Pausing (scene settling / retry budget) | `INTERACT_DONE`, `TOO_MANY_FAILURES` | `READY` |
+| `EXPLORE` | Blind exploration (no targets) | `NO_TARGET`, `LOST_TARGET` | `EXPLORED`, `FOUND_TARGET` |
+
+The FSM is fully configurable — see `src/main.py::build_demo_fsm()` and
+`src/fsm.py` for how to define your own topology.
+
+## 8. HIL Workflow
+
+Human-in-the-Loop (HIL) lets a human **override** the agent in real time:
+
+```
+┌──────────┐  POST /hil/set_correction  ┌──────────────┐  GET /hil/get_correction  ┌──────────┐
+│  Human   │ ─────────────────────────> │ HIL Server   │ ────────────────────────> │  Agent   │
+│ Operator │                            │ (Flask)      │                           │  Loop    │
+└──────────┘                            └──────────────┘                           └──────────┘
+                                             ↑                                         │
+                                             │  POST /hil/send_correction (learn)      │
+                                             └─────────────────────────────────────────┘
+```
+
+1. **Operator** pushes a correction (e.g. "click at x,y") via the HIL server.
+2. **Agent** polls for corrections each loop iteration.
+3. If a correction exists, the **agent applies it immediately** (e.g.
+   performs the click) and **forwards it to the decision agent** for
+   "learning" (recorded for later analysis).
+4. Corrections support `click`, `stop`, and `reset` actions.
+
+Start the HIL server:
+
 ```bash
 python run.py --hil
+# Available at http://localhost:8001/hil
 ```
 
-5. **启动主程序**
+See [`docs/hil-workflow.md`](docs/hil-workflow.md) for the full API.
+
+## 9. Testing
+
 ```bash
-python run.py --start
+# Run the full test suite (no GUI, no network required)
+pytest tests/ -v
+
+# Run a specific module
+pytest tests/test_fsm.py -v
+pytest tests/test_vision.py -v
 ```
 
-### 快捷键
-- `ESC`：立即终止脚本
+The suite covers:
+- **FSM engine**: transitions, guards, actions, callbacks, history, reset
+- **Vision engine**: multi-scale matching, template loading, classification
+- **HIL system**: server endpoints, client validation, correction flow
+- **Decision agent**: priority rules, failure handling, cloud fallback
+- **Demo environment**: end-to-end agent loop, reproducibility, completion
 
-## 项目结构
+CI runs automatically on every push and pull request via
+[GitHub Actions](.github/workflows/test.yml).
 
-```
-sword-legend-explorer/
-├── assets/
-│   ├── samples/          # 样本图片（定位器、对话框等）
-│   └── templates/        # 模板图片（战斗按钮、拾取物品等）
-├── src/
-│   ├── main.py           # 主程序入口
-│   ├── mcp_server.py     # HIL 服务器
-│   └── cloud_agent.py    # 云端决策 Agent
-├── tests/
-│   ├── test_mcp.py       # HIL 测试脚本
-│   ├── test_config.py    # 配置测试脚本
-│   └── test_cloud_decision.py  # 云端决策测试
-├── references/
-│   ├── api-reference.md  # API 接口文档
-│   └── config-guide.md   # 配置指南
-├── config.yaml           # 主配置文件
-├── requirements.txt      # 依赖列表
-├── .gitignore           # Git 忽略文件
-└── README.md            # 项目说明文档
-```
+## 10. Safety Boundaries
 
-## 配置说明
+> **This project is for local, controlled demo environments, research, and
+> education.**
 
-### 匹配阈值
-```yaml
-confidence_map: 0.45      # 地图定位器匹配阈值
-confidence_battle: 0.8    # 战斗按钮匹配阈值
-confidence_pickup: 0.8    # 拾取物品匹配阈值
-```
+- It is **not** intended for cheating, botting, bypassing platform rules,
+  or automating third-party services without permission.
+- The **default demo** runs against a local synthetic UI environment —
+  no screen capture, no external input, no network (except optional local
+  HIL).
+- The optional **live mode** captures a screen region you explicitly
+  configure. Use it **only** on systems you own or are authorised to
+  control. `pyautogui.FAILSAFE` remains enabled so you can abort by moving
+  the mouse to a screen corner.
+- No anti-detection, evasion, or human-mimicry features are included or
+  will be accepted as contributions.
 
-### 操作参数
-```yaml
-click_delay: [0.05, 0.2]  # 点击延迟范围
-walk_delay: [1.0, 3.0]    # 走路延迟范围
-battle_delay: [4.0, 6.0]  # 战斗延迟范围
-loop_delay: [2.0, 4.0]    # 循环延迟范围
-```
+See [`docs/safety-boundaries.md`](docs/safety-boundaries.md) for full
+details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 
-### 视觉参数
-```yaml
-scale_range: [0.6, 1.4]   # 缩放范围
-scale_steps: 10            # 缩放步数
-```
+## 11. Roadmap
 
-## HIL API 接口
+### v0.1.0 (current)
+- ✅ Core FSM + Vision + HIL framework
+- ✅ Synthetic demo environment
+- ✅ Local + optional cloud decision agents
+- ✅ 50-test pytest suite with CI
 
-### 获取纠正指令
-```
-GET /hil/get_correction
-```
+### v0.2.0 (planned)
+- Additional demo scenarios (multi-agent, dynamic obstacles)
+- Configurable FSM topologies via YAML
+- Vision pipeline extensions (edge detection, feature matching)
+- Web dashboard for HIL corrections
 
-### 发送学习数据
-```
-POST /hil/send_correction
-```
+### v0.3.0+ (future)
+- Plugin system for custom environments
+- Performance benchmarking harness
+- Educational lab exercises
 
-### 设置纠正指令（测试）
-```
-POST /hil/set_correction
-```
+## 12. Contributing
 
-### 获取服务状态
-```
-GET /hil/status
-```
+Contributions are welcome! Please read [`CONTRIBUTING.md`](CONTRIBUTING.md)
+before opening a pull request.
 
-## 核心解决痛点
+**Key rules:**
+- Tests must pass (`pytest tests/ -v`)
+- No game-specific content or anti-detection features
+- Keep the framework generic and the demo reproducible
+- Follow the [safety boundaries](#10-safety-boundaries)
 
-1. **重复性操作疲劳**：游戏探索过程中大量重复的点击、寻路操作，通过自动化解放双手
-2. **手动操作精度限制**：计算机视觉识别精度远超人工点击，减少误操作
-3. **长时间运行稳定性**：支持 7x24 小时不间断运行，不受人类疲劳限制
-4. **标准化操作流程**：统一的操作逻辑，确保探索路径的一致性和可复现性
+### License
 
-## Agent 协作与长链路推理
-
-### HIL 纠正工作流
-```
-用户设置纠正指令 → HIL 服务器接收 → 主程序获取指令
-       ↓
-执行纠正操作 → 发送学习数据 → Agent 优化决策
-```
-
-### 状态转换推理
-- **多条件判断**：基于置信度、位置信息、历史状态的综合决策
-- **边缘触发机制**：定位器靠近屏幕边缘时自动触发地图拖动
-- **失败重试逻辑**：连续识别失败时进入盲探索模式，避免死循环
-
-## 性能指标
-
-| 指标项 | 性能参数 |
-|-------|---------|
-| 单帧识别耗时 | < 100ms |
-| 定位器识别率 | > 95% |
-| 战斗按钮识别率 | > 98% |
-| 支持模板数量 | 25+ |
-| 平均操作延迟 | 1-3 秒 |
-| 连续运行稳定性 | 7x24 小时 |
-
-## 开发与测试
-
-### 运行测试
-```bash
-# 测试 HIL 服务
-python tests/test_mcp.py
-
-# 测试配置
-python tests/test_config.py
-
-# 测试云端决策
-python tests/test_cloud_decision.py
-```
-
-### 添加新模板
-1. 将模板图片放入 `assets/templates/` 或 `assets/samples/`
-2. 在配置文件中添加对应路径
-3. 在代码中注册新的识别逻辑
-
-## 注意事项
-
-1. **窗口配置**：确保 `window_title` 和 `window_region` 准确匹配游戏窗口
-2. **模板匹配**：建议使用高清晰度截图，提升识别准确率
-3. **防检测机制**：已内置随机延迟和偏移，模拟真实人类操作
-4. **安全使用**：请遵守游戏用户协议，合理使用自动化工具
-
-## 许可证
-
-本项目仅供学习和研究使用。
-
-## 联系方式
-
-- GitHub: [evanzheng0107-dev](https://github.com/evanzheng0107-dev)
-- 项目地址: https://github.com/evanzheng0107-dev/sword-legend-explorer
+This project is licensed under the [MIT License](LICENSE).
