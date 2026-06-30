@@ -8,6 +8,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **`[project.scripts]` entry point** in pyproject.toml (`vision-fsm-agent`).
+- **`src/py.typed`** - PEP 561 typed-package marker.
+- **CITATION.cff** - Citation File Format for academic use.
+- **.pre-commit-config.yaml** - Pre-commit hooks (ruff, mypy, standard hooks).
+- **Makefile** - Convenience commands (install, test, demo, lint, check, clean).
+- **.github/dependabot.yml** - Dependency update automation (pip + github-actions).
+- **.github/workflows/lint.yml** - CI lint workflow (ruff + mypy + bandit).
+- **.github/FUNDING.yml** - Sponsorship configuration (placeholder).
+- **docs/releases/v0.1.0.md** - Formal v0.1.0 release notes.
+- **docs/troubleshooting.md** - Troubleshooting guide (OpenCV, Windows, pytest, HIL).
+- **docs/api/** - API reference (README + fsm + vision + agent + hil).
+- **mkdocs.yml** - MkDocs Material documentation site configuration.
+- **.readthedocs.yaml** - ReadTheDocs configuration.
+- **.devcontainer/devcontainer.json** - Dev container for VS Code / Codespaces.
+- **tests/test_agent.py** - Dedicated agent tests (15 tests, split from test_config.py
+  plus new edge-case coverage).
+- **Code quality tool config** in pyproject.toml: `[tool.ruff]`, `[tool.mypy]`,
+  `[tool.bandit]` with dev extras (ruff, mypy, bandit, pre-commit).
+
+### Changed
+- **pyproject.toml** - Added `[project.scripts]`, ruff/mypy/bandit config, expanded
+  dev extras.
+- **CHANGELOG.md** - Added link definitions at file end (`[Unreleased]:`, `[0.1.0]:`).
+- **tests/test_config.py** - Moved agent tests to test_agent.py; added config tests.
+- **scripts/oss_readiness_check.py** - Added 19 new files to required list; added
+  `allow_empty` flag for py.typed.
+
+### Added (continued — Day 1)
 - **README Quick Demo section** - A 30-second "see it in action" section
   with copy-paste commands and expected output, placed before Quick Start.
 - **docs/demo.md** - Detailed demo walkthrough: overview, prerequisites,
@@ -105,3 +133,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   randomisation designed to evade detection).
 - Cloud API keys and provider-specific configuration from the codebase.
 - References to specific games and emulators throughout.
+
+---
+
+[Unreleased]: https://github.com/evanzheng0107-dev/sword-legend-explorer/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/evanzheng0107-dev/sword-legend-explorer/releases/tag/v0.1.0

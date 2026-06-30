@@ -4,6 +4,58 @@
 
 ---
 
+## P003 — 2026-06-30 12:30
+
+### Completed
+
+Fixed all 15 engineering gaps identified in the project assessment:
+
+**New files (21)**:
+- `src/py.typed` (PEP 561 marker)
+- `CITATION.cff` (academic citation)
+- `.pre-commit-config.yaml` (ruff + mypy + standard hooks)
+- `Makefile` (install/test/demo/lint/check/clean targets)
+- `.github/dependabot.yml` (pip + github-actions updates)
+- `.github/workflows/lint.yml` (ruff + mypy + bandit CI)
+- `.github/FUNDING.yml` (sponsorship placeholder)
+- `docs/releases/v0.1.0.md` (formal release notes)
+- `docs/troubleshooting.md` (OpenCV/Windows/pytest/HIL troubleshooting)
+- `docs/api/README.md` + `fsm.md` + `vision.md` + `agent.md` + `hil.md`
+- `mkdocs.yml` (MkDocs Material site config)
+- `.readthedocs.yaml` (ReadTheDocs config)
+- `.devcontainer/devcontainer.json` (VS Code / Codespaces)
+- `tests/test_agent.py` (15 dedicated agent tests)
+
+**Modified files (4)**:
+- `pyproject.toml` — added [project.scripts], [tool.ruff], [tool.mypy],
+  [tool.bandit], expanded dev extras
+- `CHANGELOG.md` — added link definitions + [Unreleased] entries
+- `tests/test_config.py` — moved agent tests out, added config tests
+- `scripts/oss_readiness_check.py` — added 19 new files to required list,
+  added allow_empty flag for py.typed
+
+### Validation
+
+- pytest: **pass** (61 tests — up from 50, thanks to test_agent.py)
+- oss_readiness_check: **pass** (66 files OK, 0 missing, 0 empty)
+- risky wording scan: **pass** (0 Chinese, 0 English real, 59 exempted)
+- git status: dirty (all changes uncommitted)
+
+### Notes
+
+- py.typed is an empty file by design (PEP 561 marker); oss_readiness_check
+  now supports an `allow_empty` flag for such cases.
+- ruff/mypy/bandit configs are created but tools not installed locally;
+  they will run in CI (lint.yml) and via pre-commit.
+- mkdocs.yml and .readthedocs.yaml configure the doc site but it is not
+  yet built/deployed.
+
+### Next
+
+Day 2: Contributor experience (CONTRIBUTING polish + PR template verify).
+
+---
+
 ## P002 — 2026-06-30 11:00
 
 ### Completed

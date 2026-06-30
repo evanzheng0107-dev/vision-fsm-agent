@@ -40,6 +40,7 @@ REQUIRED_FILES = [
     ("SECURITY.md", True, "Security policy and vulnerability reporting"),
     ("CHANGELOG.md", True, "Keep a Changelog format version history"),
     ("AGENTS.md", True, "AI coding agent guidance"),
+    ("CITATION.cff", True, "Citation File Format for academic use"),
     # Packaging
     ("pyproject.toml", True, "PEP 621 project metadata and tool config"),
     ("requirements.txt", True, "Pinned runtime dependencies"),
@@ -47,10 +48,25 @@ REQUIRED_FILES = [
     (".env.example", True, "Example environment variables"),
     (".editorconfig", True, "Editor configuration for consistent style"),
     ("config.yaml", True, "Default framework configuration"),
+    ("Makefile", True, "Convenience commands for dev workflow"),
+    (".pre-commit-config.yaml", True, "Pre-commit hooks configuration"),
+    # Type marker (empty by design — PEP 561 marker is just its presence)
+    ("src/py.typed", True, "PEP 561 typed-package marker", "allow_empty"),
     # Documentation
     ("docs/architecture.md", True, "Architecture deep-dive"),
+    ("docs/demo.md", True, "Demo walkthrough"),
     ("docs/hil-workflow.md", True, "HIL API reference"),
     ("docs/safety-boundaries.md", True, "Safety boundaries and permitted uses"),
+    ("docs/troubleshooting.md", True, "Troubleshooting guide"),
+    ("docs/api/README.md", True, "API reference index"),
+    ("docs/api/fsm.md", True, "FSM API reference"),
+    ("docs/api/vision.md", True, "Vision API reference"),
+    ("docs/api/agent.md", True, "Agent API reference"),
+    ("docs/api/hil.md", True, "HIL API reference"),
+    ("docs/releases/v0.1.0.md", True, "v0.1.0 release notes"),
+    # Doc site
+    ("mkdocs.yml", False, "MkDocs documentation site config"),
+    (".readthedocs.yaml", False, "ReadTheDocs configuration"),
     # Maintenance ledger
     ("docs/agent_ledger/README.md", True, "Maintenance ledger directory guide"),
     ("docs/agent_ledger/SESSION_START.md", True, "Session start context"),
@@ -66,7 +82,12 @@ REQUIRED_FILES = [
     (".github/ISSUE_TEMPLATE/config.yml", False, "Issue template chooser config"),
     (".github/PULL_REQUEST_TEMPLATE.md", True, "Pull request template"),
     (".github/workflows/test.yml", True, "CI test workflow"),
+    (".github/workflows/lint.yml", True, "CI lint workflow"),
     (".github/CODEOWNERS", True, "Code owners for PR review routing"),
+    (".github/dependabot.yml", True, "Dependabot configuration"),
+    (".github/FUNDING.yml", False, "Sponsorship configuration"),
+    # Dev container
+    (".devcontainer/devcontainer.json", False, "Dev container configuration"),
     # Source
     ("src/__init__.py", True, "Package init with __version__"),
     ("src/fsm.py", True, "FSM engine"),
@@ -80,7 +101,8 @@ REQUIRED_FILES = [
     ("tests/test_fsm.py", True, "FSM tests"),
     ("tests/test_vision.py", True, "Vision tests"),
     ("tests/test_hil.py", True, "HIL tests"),
-    ("tests/test_config.py", True, "Config and agent tests"),
+    ("tests/test_config.py", True, "Config tests"),
+    ("tests/test_agent.py", True, "Agent decision tests"),
     ("tests/test_demo.py", True, "Demo end-to-end tests"),
     # Scripts and examples
     ("scripts/generate_demo_assets.py", True, "Demo asset generator"),
@@ -199,7 +221,9 @@ def check_files(verbose: bool = False) -> tuple:
     empty = []
     ok_count = 0
 
-    for rel_path, required, desc in REQUIRED_FILES:
+    for entry in REQUIRED_FILES:
+        rel_path, required, desc = entry[0], entry[1], entry[2]
+        allow_empty = len(entry) > 3 and entry[3] == "allow_empty"
         full = ROOT / rel_path
         if not full.exists():
             if required:
@@ -209,7 +233,7 @@ def check_files(verbose: bool = False) -> tuple:
             else:
                 if verbose:
                     print(f"  missing (optional): {rel_path}  -- {desc}")
-        elif full.stat().st_size == 0:
+        elif full.stat().st_size == 0 and not allow_empty:
             empty.append((rel_path, desc))
             if verbose:
                 print(f"  EMPTY: {rel_path}  -- {desc}")

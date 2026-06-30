@@ -1,0 +1,60 @@
+site_name: Vision FSM Agent
+site_description: A lightweight Python framework for CV-driven automation agents with FSM control and HIL correction.
+site_url: https://github.com/evanzheng0107-dev/sword-legend-explorer
+repo_url: https://github.com/evanzheng0107-dev/sword-legend-explorer
+repo_name: evanzheng0107-dev/sword-legend-explorer
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - content.code.copy
+  language: en
+
+nav:
+  - Home: index.md
+  - Quick Start:
+    - Demo: demo.md
+    - Architecture: architecture.md
+  - Guides:
+    - HIL Workflow: hil-workflow.md
+    - Troubleshooting: troubleshooting.md
+  - API Reference:
+    - Overview: api/README.md
+    - FSM: api/fsm.md
+    - Vision: api/vision.md
+    - Agent: api/agent.md
+    - HIL: api/hil.md
+  - Project:
+    - Safety Boundaries: safety-boundaries.md
+    - Releases: releases/v0.1.0.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true

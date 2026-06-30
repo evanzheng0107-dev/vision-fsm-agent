@@ -1,0 +1,39 @@
+{
+  "name": "Vision FSM Agent",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "username": "vscode",
+      "upgradePackages": true
+    }
+  },
+  "postCreateCommand": "pip install -e \".[dev]\" && python scripts/generate_demo_assets.py",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests/"],
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "ruff.lineLength": 100
+      }
+    }
+  },
+  "forwardPorts": [8001],
+  "remoteEnv": {
+    "PYTHONPATH": "${containerWorkspaceFolder}/src:${containerWorkspaceFolder}/demo_app"
+  }
+}
