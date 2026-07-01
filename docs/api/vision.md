@@ -69,7 +69,7 @@ from vision import TemplateManager
 import cv2
 
 mgr = TemplateManager(confidence_threshold=0.75)
-mgr.load_directory("assets/demo")
+mgr.load_directory("examples/visual_grid_world/assets")
 
 frame = cv2.imread("some_frame.png")
 result = mgr.match_best(frame)

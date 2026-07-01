@@ -161,4 +161,4 @@ with app.test_client() as client:
     assert resp.get_json()["action"] == "click"
 ```
 
-See `tests/test_hil.py` for the full test suite.
+See `tests/integration/test_hil.py` for the full test suite.

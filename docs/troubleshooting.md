@@ -42,7 +42,7 @@ pip install -e ".[dev]"
 
 ### "No templates found" or demo exits immediately
 
-The demo needs template images in `assets/demo/`. Generate them:
+The demo needs template images in `examples/visual_grid_world/assets/`. Generate them:
 
 ```bash
 python scripts/generate_demo_assets.py
@@ -51,7 +51,7 @@ python scripts/generate_demo_assets.py
 Verify the files exist:
 
 ```bash
-ls assets/demo/
+ls examples/visual_grid_world/assets/
 # Should show: interact_button.png  pickup_item.png  target_goal.png
 ```
 
@@ -68,13 +68,13 @@ confidence_default: 0.6
 
 Some random seeds produce harder layouts. Options:
 
-1. Increase step count: `python demo_app/visual_grid_world.py --steps 60`
+1. Increase step count: `python examples/visual_grid_world/run_demo.py --steps 60`
 2. Change the seed in `config.yaml`: `demo_seed: 7`
 3. Reduce grid size for faster completion: `demo_grid_w: 8`
 
 ### `TypeError: 'NoneType' object is not subscriptable` during demo
 
-This usually means a template failed to load. Ensure `assets/demo/`
+This usually means a template failed to load. Ensure `examples/visual_grid_world/assets/`
 contains the 3 PNG files and they are valid images.
 
 ## Windows Issues
@@ -149,7 +149,7 @@ unavailable.
 
 ### HIL server port 8001 already in use
 
-Change the port in `src/hil_server.py` (the `run()` call) and update
+Change the port in `src/vision_fsm_agent/hil/server.py` (the `run()` call) and update
 `hil_server_url` in `config.yaml`.
 
 ## Performance
@@ -175,5 +175,5 @@ Change the port in `src/hil_server.py` (the `run()` call) and update
    ```bash
    python --version
    pytest tests/ -q
-   python demo_app/visual_grid_world.py --steps 5
+   python examples/visual_grid_world/run_demo.py --steps 5
    ```

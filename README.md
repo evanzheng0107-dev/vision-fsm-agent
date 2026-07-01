@@ -34,11 +34,11 @@ three classic automation building blocks:
 
 | Building block | Module | What it does |
 |---|---|---|
-| **Computer Vision** | `src/vision.py` | Multi-scale OpenCV template matching with configurable thresholds |
-| **Finite-State Machine** | `src/fsm.py` | Generic FSM with guards, actions, callbacks, and transition history |
-| **Human-in-the-Loop** | `src/hil_*.py` | HTTP-based correction channel so a human can override the agent in real time |
+| **Computer Vision** | `src/vision_fsm_agent/vision.py` | Multi-scale OpenCV template matching with configurable thresholds |
+| **Finite-State Machine** | `src/vision_fsm_agent/fsm.py` | Generic FSM with guards, actions, callbacks, and transition history |
+| **Human-in-the-Loop** | `src/vision_fsm_agent/hil/` | HTTP-based correction channel so a human can override the agent in real time |
 
-These are wired together by a generic **agent loop** (`src/main.py`) that
+These are wired together by a generic **agent loop** (`src/vision_fsm_agent/main.py`) that
 drives an **Environment** — an interface you can implement for any target.
 The project ships with a **synthetic demo environment** so you can run the
 entire pipeline with zero external setup.
@@ -79,7 +79,7 @@ git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
 cd sword-legend-explorer
 pip install -r requirements.txt
 python scripts/generate_demo_assets.py
-python demo_app/visual_grid_world.py --steps 20
+python examples/visual_grid_world/run_demo.py --steps 20
 ```
 
 Expected output (the agent navigates, collects items, presses buttons):
@@ -111,7 +111,7 @@ pip install -r requirements.txt
 python scripts/generate_demo_assets.py
 
 # 4. Run the demo
-python demo_app/visual_grid_world.py --steps 20
+python examples/visual_grid_world/run_demo.py --steps 20
 ```
 
 You should see the agent navigate a grid world, collect items, and press
@@ -127,7 +127,7 @@ python run.py --hil              # start the HIL correction server
 
 ## 6. Demo Environment
 
-The demo (`demo_app/visual_grid_world.py`) is a **fully synthetic,
+The demo (`examples/visual_grid_world/run_demo.py`) is a **fully synthetic,
 headless, reproducible** environment:
 
 - A 12×12 grid world rendered to a BGR image with OpenCV/numpy
@@ -137,7 +137,7 @@ headless, reproducible** environment:
 - An **agent** (red diamond) that moves, collects, and interacts
 
 Each frame is rendered using the **same drawing primitives** that
-generate the template images in `assets/demo/`. This guarantees that
+generate the template images in `examples/visual_grid_world/assets/`. This guarantees that
 template matching actually finds the elements — making the demo a genuine
 end-to-end test of the vision pipeline.
 
@@ -155,7 +155,7 @@ default), so runs are reproducible.
 Save frames as PNGs for inspection:
 
 ```bash
-python demo_app/visual_grid_world.py --save demo_frames --steps 20
+python examples/visual_grid_world/run_demo.py --save demo_frames --steps 20
 ```
 
 ## 7. Architecture
@@ -170,18 +170,18 @@ python demo_app/visual_grid_world.py --save demo_frames --steps 20
 └─────────────────────────────────────────────────────────────┘
                               ↓ frame (np.ndarray)
 ┌─────────────────────────────────────────────────────────────┐
-│                   Vision Layer (src/vision.py)               │
+│                   Vision Layer (vision_fsm_agent/vision.py)               │
 │        Multi-scale template matching (OpenCV)                │
 │        TemplateManager → MatchResult[]                       │
 └─────────────────────────────────────────────────────────────┘
                               ↓ match results
 ┌─────────────────────────────────────────────────────────────┐
-│                   FSM Layer (src/fsm.py)                      │
+│                   FSM Layer (vision_fsm_agent/fsm.py)                      │
 │   IDLE ↔ MOVE ↔ PICKUP ↔ INTERACT ↔ WAIT ↔ EXPLORE         │
 └─────────────────────────────────────────────────────────────┘
                               ↓ events
 ┌─────────────────────────────────────────────────────────────┐
-│                Decision Layer (src/agent.py)                  │
+│                Decision Layer (vision_fsm_agent/agent.py)                  │
 │   ┌──────────────────┐      ┌──────────────────────┐        │
 │   │ LocalDecisionAgent│      │ CloudDecisionAgent   │        │
 │   │ (rule-based)      │      │ (LLM, optional)      │        │
@@ -189,7 +189,7 @@ python demo_app/visual_grid_world.py --save demo_frames --steps 20
 └─────────────────────────────────────────────────────────────┘
                               ↓ action
 ┌─────────────────────────────────────────────────────────────┐
-│              HIL Layer (src/hil_client.py / hil_server.py)   │
+│              HIL Layer (vision_fsm_agent/hil/)   │
 │        Human corrections over HTTP (Flask)                   │
 │        get_correction → apply → send_correction (learn)     │
 └─────────────────────────────────────────────────────────────┘
@@ -212,8 +212,8 @@ The demo agent uses the following state machine:
 | `WAIT` | Pausing (scene settling / retry budget) | `INTERACT_DONE`, `TOO_MANY_FAILURES` | `READY` |
 | `EXPLORE` | Blind exploration (no targets) | `NO_TARGET`, `LOST_TARGET` | `EXPLORED`, `FOUND_TARGET` |
 
-The FSM is fully configurable — see `src/main.py::build_demo_fsm()` and
-`src/fsm.py` for how to define your own topology.
+The FSM is fully configurable — see `src/vision_fsm_agent/main.py::build_demo_fsm()` and
+`src/vision_fsm_agent/fsm.py` for how to define your own topology.
 
 ## 9. HIL Workflow
 
@@ -301,8 +301,8 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full development guide.
 pytest tests/ -v
 
 # Run a specific module
-pytest tests/test_fsm.py -v
-pytest tests/test_vision.py -v
+pytest tests/unit/test_fsm.py -v
+pytest tests/unit/test_vision.py -v
 ```
 
 The suite covers:
@@ -341,7 +341,7 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 - ✅ Core FSM + Vision + HIL framework
 - ✅ Synthetic demo environment
 - ✅ Local + optional cloud decision agents
-- ✅ 50-test pytest suite with CI
+- ✅ 61-test pytest suite with CI
 
 ### v0.2.0 (planned)
 - Additional demo scenarios (multi-agent, dynamic obstacles)
@@ -365,6 +365,48 @@ before opening a pull request.
 - Keep the framework generic and the demo reproducible
 - Follow the [safety boundaries](#10-safety-boundaries)
 
-### License
+### Project Structure
+
+```
+vision-fsm-agent/
+├── src/vision_fsm_agent/        Core framework package
+│   ├── __init__.py              Public API + __version__
+│   ├── fsm.py                   Generic FSM engine
+│   ├── vision.py                Multi-scale OpenCV template matching
+│   ├── agent.py                 Decision agents (local + optional cloud)
+│   ├── main.py                  Agent loop (environment-agnostic)
+│   ├── config.py                Configuration loader
+│   ├── cli.py                   CLI entry point
+│   ├── hil/                     Human-in-the-Loop subpackage
+│   │   ├── client.py            HIL HTTP client
+│   │   └── server.py            HIL Flask server
+│   ├── envs/                    Environments subpackage
+│   │   └── grid_world.py        Synthetic demo environment
+│   ├── decision/                Decision re-exports
+│   ├── actions/                 Actions (placeholder)
+│   └── utils/                   Utilities (placeholder)
+├── examples/
+│   ├── visual_grid_world/       Demo runner + config + assets
+│   └── custom_fsm/              Custom FSM topology example
+├── tests/
+│   ├── unit/                    FSM, vision, agent, config tests
+│   ├── integration/             HIL, demo end-to-end tests
+│   └── smoke/                   Demo smoke test
+├── config/
+│   ├── default.yaml             Default framework configuration
+│   └── demo.yaml                Demo-specific configuration
+├── docs/                        User documentation
+│   ├── api/                     API reference
+│   ├── releases/                Release notes
+│   └── maintainer/              Maintainer docs + agent_ledger/
+├── scripts/                     OSS check, asset generator
+├── .github/                     CI, issue/PR templates, CODEOWNERS
+├── README.md
+├── pyproject.toml
+├── run.py                       Thin launcher → vision_fsm_agent.cli
+└── ...                          LICENSE, CHANGELOG, CONTRIBUTING, etc.
+```
+
+## License
 
 This project is licensed under the [MIT License](LICENSE).

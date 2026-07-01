@@ -12,7 +12,7 @@ Environment → Vision → FSM → Decision → (HIL) → Action → Environment
 ```
 
 Each layer is an independent module with a clear interface. The agent
-loop (`src/main.py`) orchestrates them.
+loop (`src/vision_fsm_agent/main.py`) orchestrates them.
 
 ## Layers
 
@@ -36,10 +36,10 @@ Two implementations ship with the project:
 
 | Implementation | File | Description |
 |---|---|---|
-| `DemoEnvironment` | `demo_app/visual_grid_world.py` | Synthetic grid world; **default**; no I/O |
-| `LiveEnvironment` | `src/main.py` | Screen capture (`mss`) + mouse input (`pyautogui`); **opt-in** |
+| `DemoEnvironment` | `src/vision_fsm_agent/envs/grid_world.py` | Synthetic grid world; **default**; no I/O |
+| `LiveEnvironment` | `src/vision_fsm_agent/main.py` | Screen capture (`mss`) + mouse input (`pyautogui`); **opt-in** |
 
-### 2. Vision Layer (`src/vision.py`)
+### 2. Vision Layer (`src/vision_fsm_agent/vision.py`)
 
 The vision layer wraps OpenCV's `cv2.matchTemplate` with:
 
@@ -53,7 +53,7 @@ The vision layer wraps OpenCV's `cv2.matchTemplate` with:
 
 ```python
 mgr = TemplateManager(confidence_threshold=0.75)
-mgr.load_directory("assets/demo")
+mgr.load_directory("examples/visual_grid_world/assets")
 results = mgr.match_all(frame)  # sorted by confidence, descending
 ```
 
@@ -62,7 +62,7 @@ The demo templates are **programmatically generated** by
 `DemoEnvironment` uses to render frames. This guarantees pixel-accurate
 matches.
 
-### 3. FSM Layer (`src/fsm.py`)
+### 3. FSM Layer (`src/vision_fsm_agent/fsm.py`)
 
 A generic, dependency-free finite-state machine:
 
@@ -81,7 +81,7 @@ fsm.on_enter("MOVE", lambda fsm, p: print("now moving"))
 fsm.fire("FOUND_TARGET", payload={"target": (5, 3)})
 ```
 
-### 4. Decision Layer (`src/agent.py`)
+### 4. Decision Layer (`src/vision_fsm_agent/agent.py`)
 
 Two interchangeable agents implementing a common `get_decision(state)`
 interface:
@@ -97,7 +97,7 @@ interface:
 - **Falls back** to `LocalDecisionAgent` when no key is set or a request
   fails — the agent loop never blocks
 
-### 5. HIL Layer (`src/hil_client.py`, `src/hil_server.py`)
+### 5. HIL Layer (`src/vision_fsm_agent/hil/client.py`, `src/vision_fsm_agent/hil/server.py`)
 
 A Flask server brokers corrections between a human and the agent:
 
@@ -110,7 +110,7 @@ A Flask server brokers corrections between a human and the agent:
 HIL is **fully optional**. If the server is down, the agent continues
 autonomously.
 
-### 6. Agent Loop (`src/main.py::AgentLoop`)
+### 6. Agent Loop (`src/vision_fsm_agent/main.py::AgentLoop`)
 
 The orchestrator that ties everything together:
 
@@ -141,7 +141,7 @@ main.py
   ├── hil_client.py   (requests)
   └── hil_server.py   (flask)
 
-demo_app/visual_grid_world.py
+src/vision_fsm_agent/envs/grid_world.py
   └── (opencv, numpy)  — imports main.py at runtime
 ```
 

@@ -7,7 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Changed — Project reorganization into standard Python package layout
+- **Core code moved** from flat `src/*.py` to `src/vision_fsm_agent/` package
+  with subpackages: `hil/`, `envs/`, `decision/`, `actions/`, `utils/`.
+- **`config.py` and `cli.py`** extracted from `main.py` for single-responsibility.
+- **Demo moved** from `demo_app/` to `examples/visual_grid_world/` (runner,
+  config, assets). Core environment class moved to
+  `src/vision_fsm_agent/envs/grid_world.py`.
+- **Config moved** from root `config.yaml` to `config/default.yaml` +
+  `config/demo.yaml` + `examples/visual_grid_world/config.yaml`.
+- **Assets moved** from `assets/demo/` to `examples/visual_grid_world/assets/`.
+- **Maintainer docs moved** from `docs/agent_ledger/` to
+  `docs/maintainer/agent_ledger/`. CODEX_OSS_APPLICATION and RELEASE_PLAN
+  moved to `docs/maintainer/`.
+- **Tests split** into `tests/unit/`, `tests/integration/`, `tests/smoke/`.
+- **All imports** changed from flat (`from fsm import`) to package
+  (`from vision_fsm_agent.fsm import`).
+- **`run.py`** simplified to thin wrapper calling `vision_fsm_agent.cli.main()`.
+- **`pyproject.toml`** entry point updated to `vision_fsm_agent.cli:main`;
+  `pythonpath` simplified to `["src"]`.
+- **CI workflow** updated to use `pip install -e ".[dev]"` and new demo path.
+- **`scripts/oss_readiness_check.py`** REQUIRED_FILES updated to 76 new paths.
+- **README, docs/** updated to reference new paths throughout.
+- **`examples/custom_fsm.py`** moved to `examples/custom_fsm/custom_fsm.py`.
+
+### Added — Engineering gaps fixed
 - **README Development Setup section** (section 10) - covers Makefile quick
   setup, manual venv setup, pre-commit installation, dev container, and
   useful commands table. Renumbered subsequent sections (11-14).
@@ -15,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Makefile Commands Reference, Dev Container, Adding New Features guide,
   and conventional commit message format.
 - **`[project.scripts]` entry point** in pyproject.toml (`vision-fsm-agent`).
-- **`src/py.typed`** - PEP 561 typed-package marker.
+- **`src/vision_fsm_agent/py.typed`** - PEP 561 typed-package marker.
 - **CITATION.cff** - Citation File Format for academic use.
 - **.pre-commit-config.yaml** - Pre-commit hooks (ruff, mypy, standard hooks).
 - **Makefile** - Convenience commands (install, test, demo, lint, check, clean).

@@ -42,7 +42,7 @@ fsm.add_transition("IDLE", "FOUND", "ACTIVE")
 
 # Load templates
 vision = TemplateManager(confidence_threshold=0.75)
-vision.load_directory("assets/demo")
+vision.load_directory("examples/visual_grid_world/assets")
 
 # Decide
 agent = LocalDecisionAgent()

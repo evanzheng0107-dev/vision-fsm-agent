@@ -6,7 +6,7 @@ configure it.
 
 ## Overview
 
-The **Visual Grid World** (`demo_app/visual_grid_world.py`) is a fully
+The **Visual Grid World** (`examples/visual_grid_world/run_demo.py`) is a fully
 synthetic, headless, reproducible environment. It lets you run the
 complete agent pipeline — vision → FSM → decision → action — **without
 any external software, screen capture, or network access**.
@@ -33,7 +33,7 @@ No game, emulator, or GUI is required.
 ### Quick run
 
 ```bash
-python demo_app/visual_grid_world.py --steps 20
+python examples/visual_grid_world/run_demo.py --steps 20
 ```
 
 ### Using the launcher
@@ -52,7 +52,7 @@ python run.py --start --steps 30   # specify step count
 
 ### Generate demo assets
 
-The demo requires template images in `assets/demo/`. Generate them with:
+The demo requires template images in `examples/visual_grid_world/assets/`. Generate them with:
 
 ```bash
 python scripts/generate_demo_assets.py
@@ -114,7 +114,7 @@ Each iteration of the agent loop performs:
 
 ## Demo Configuration
 
-The demo reads from `config.yaml`. Key settings:
+The demo reads from `config/default.yaml`. Key settings:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -131,7 +131,7 @@ The demo reads from `config.yaml`. Key settings:
 
 ### Changing the world layout
 
-Edit `demo_seed` in `config.yaml` to get a different arrangement of
+Edit `demo_seed` in `config/default.yaml` to get a different arrangement of
 goals, items, and buttons. The same seed always produces the same
 layout — useful for reproducible testing.
 
@@ -146,7 +146,7 @@ positives).
 To inspect what the agent "sees" each step:
 
 ```bash
-python demo_app/visual_grid_world.py --save demo_frames --steps 20
+python examples/visual_grid_world/run_demo.py --save demo_frames --steps 20
 ```
 
 Frames are saved as `demo_frames/frame_000.png`, `frame_001.png`, etc.
@@ -159,11 +159,11 @@ You can open them in any image viewer or use OpenCV to create a video.
 ### "No templates found"
 
 Run `python scripts/generate_demo_assets.py` first. The demo needs
-template images in `assets/demo/`.
+template images in `examples/visual_grid_world/assets/`.
 
 ### Demo runs but agent doesn't move
 
-Check `confidence_default` in `config.yaml`. If it's too high, template
+Check `confidence_default` in `config/default.yaml`. If it's too high, template
 matching may not find elements. Try lowering to `0.6`.
 
 ### `cv2.error` on Windows
