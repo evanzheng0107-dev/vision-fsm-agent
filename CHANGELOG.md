@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **README Development Setup section** (section 10) - covers Makefile quick
+  setup, manual venv setup, pre-commit installation, dev container, and
+  useful commands table. Renumbered subsequent sections (11-14).
+- **CONTRIBUTING.md** - Expanded with Development Setup, Pre-commit Hooks,
+  Makefile Commands Reference, Dev Container, Adding New Features guide,
+  and conventional commit message format.
 - **`[project.scripts]` entry point** in pyproject.toml (`vision-fsm-agent`).
 - **`src/py.typed`** - PEP 561 typed-package marker.
 - **CITATION.cff** - Citation File Format for academic use.

@@ -245,7 +245,56 @@ python run.py --hil
 
 See [`docs/hil-workflow.md`](docs/hil-workflow.md) for the full API.
 
-## 10. Testing
+## 10. Development Setup
+
+### Quick setup with Make
+
+```bash
+git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
+cd sword-legend-explorer
+make install   # installs package + dev dependencies
+make assets    # generates demo templates
+make test      # verifies everything works
+```
+
+### Manual setup
+
+```bash
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -e ".[dev]"
+python scripts/generate_demo_assets.py
+```
+
+### Pre-commit hooks
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+This enables ruff linting/formatting, mypy type checking, and standard
+whitespace/EOF checks before each commit.
+
+### Dev Container
+
+Open in VS Code with the Dev Containers extension for a pre-configured
+environment (see [`.devcontainer/`](.devcontainer/devcontainer.json)).
+
+### Useful commands
+
+| Command | Description |
+|---------|-------------|
+| `make test` | Run pytest |
+| `make test-cov` | Run pytest with coverage |
+| `make demo` | Run the synthetic demo |
+| `make lint` | Run ruff linter |
+| `make check` | Run OSS readiness check |
+| `make clean` | Remove build artifacts |
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full development guide.
+
+## 11. Testing
 
 ```bash
 # Run the full test suite (no GUI, no network required)
@@ -266,7 +315,7 @@ The suite covers:
 CI runs automatically on every push and pull request via
 [GitHub Actions](.github/workflows/test.yml).
 
-## 11. Safety Boundaries
+## 12. Safety Boundaries
 
 > **This project is for local, controlled demo environments, research, and
 > education.**
@@ -286,7 +335,7 @@ CI runs automatically on every push and pull request via
 See [`docs/safety-boundaries.md`](docs/safety-boundaries.md) for full
 details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 
-## 12. Roadmap
+## 13. Roadmap
 
 ### v0.1.0 (current)
 - ✅ Core FSM + Vision + HIL framework
@@ -305,7 +354,7 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 - Performance benchmarking harness
 - Educational lab exercises
 
-## 13. Contributing
+## 14. Contributing
 
 Contributions are welcome! Please read [`CONTRIBUTING.md`](CONTRIBUTING.md)
 before opening a pull request.

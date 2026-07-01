@@ -4,6 +4,61 @@
 
 ---
 
+## P004 — 2026-07-01 10:30
+
+### Completed
+
+Day 2: Contributor experience and troubleshooting documentation.
+
+- **CONTRIBUTING.md** — Expanded with:
+  - Development Setup (Makefile quick setup + manual venv + dev container)
+  - Pre-commit Hooks installation and usage
+  - Makefile Commands Reference table (11 commands)
+  - Development Workflow with conventional commit format
+  - Adding New Features guide (FSM states, vision templates, decision logic)
+  - Updated Project Structure with docs/api/ and docs/releases/
+- **README** — Added Development Setup section (section 10) with:
+  - `make install` / `make assets` / `make test` quick setup
+  - Manual venv + `pip install -e ".[dev]"` setup
+  - Pre-commit hooks installation
+  - Dev Container reference
+  - Useful commands table
+  - Link to CONTRIBUTING.md
+  - Renumbered sections 11–14 (was 10–13)
+- **PR template** — Verified safety checklist (5 safety + 3 testing + 3 docs
+  items). No changes needed.
+- **docs/troubleshooting.md** — Already created in P003, verified content
+  covers OpenCV, Windows, pytest, HIL, and performance issues.
+
+### Files Changed
+
+- `CONTRIBUTING.md` (expanded, ~107 → ~200 lines)
+- `README.md` (added section 10, renumbered 11-14)
+- `CHANGELOG.md` (updated [Unreleased])
+- `docs/agent_ledger/PROGRESS.md` (this entry)
+- `docs/agent_ledger/NEXT.md` (updated to Day 3)
+
+### Validation
+
+- pytest: **pass** (61 tests)
+- oss_readiness_check: **pass**
+- risky wording scan: **pass**
+- git status: dirty (Day 2 changes, awaiting commit + push)
+
+### Notes
+
+- Attempted to push prior commits (a3dd112–b415c91) but encountered
+  SSL/TLS handshake failure (`schannel: failed to receive handshake`).
+  Will retry push after Day 2 commit.
+- README now has 14 sections (was 13). Development Setup is section 10,
+  before Testing (now 11).
+
+### Next
+
+Day 3: Prepare v0.1.0 release materials.
+
+---
+
 ## P003 — 2026-06-30 12:30
 
 ### Completed
