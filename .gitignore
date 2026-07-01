@@ -60,3 +60,5 @@ htmlcov/
 *.tmp
 *.temp
 *.bak
+_test_*.txt
+push_result.txt
