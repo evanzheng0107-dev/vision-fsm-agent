@@ -4,6 +4,52 @@
 
 ---
 
+## P005 — 2026-07-01 11:06
+
+### Completed
+
+Day 3 (partial): v0.1.0 release material preparation.
+
+- **docs/releases/v0.1.0.md** — Updated to reflect current state:
+  61 tests (was 50), expanded governance list, updated file counts,
+  added known limitations (import style, coverage target).
+- **CHANGELOG.md** — Fixed `[0.1.0]` test count (50 → 61).
+- **RELEASE_PLAN.md** — Updated v0.1.0 status to "committed and pushed",
+  marked all 24 required items as met, added remaining steps (PR merge,
+  tag, release). Updated v0.1.1 scope with completed Day 1–2 items +
+  15 engineering gap fixes. Added v0.2.0 candidate items.
+- **CODEX_OSS_APPLICATION.md** — Updated with push evidence, expanded
+  evidence checklist (17 items, 15 ✅), updated application statement.
+
+### Files Changed
+
+- `docs/releases/v0.1.0.md` (updated)
+- `CHANGELOG.md` (fixed test count in [0.1.0])
+- `docs/agent_ledger/RELEASE_PLAN.md` (rewritten)
+- `docs/agent_ledger/CODEX_OSS_APPLICATION.md` (rewritten)
+- `docs/agent_ledger/PROGRESS.md` (this entry)
+- `docs/agent_ledger/NEXT.md` (updated — paused, awaiting user)
+
+### Validation
+
+- pytest: not re-run (no code changes, docs only)
+- oss_readiness_check: not re-run (no new files)
+- git status: dirty (Day 3 changes, awaiting commit)
+
+### Notes
+
+- **Day 3 paused** per user instruction. Development will resume when the
+  user manually issues the next day's command.
+- All prior commits (5) have been successfully pushed to
+  `origin/refactor/vision-fsm-agent` by the user.
+- PR link available: https://github.com/evanzheng0107-dev/sword-legend-explorer/pull/new/refactor/vision-fsm-agent
+
+### Next
+
+**Paused.** Awaiting user instruction to start Day 3 completion or Day 4.
+
+---
+
 ## P004 — 2026-07-01 10:30
 
 ### Completed

@@ -107,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Programmatically generated demo assets** — all template images are
   drawn in code (`scripts/generate_demo_assets.py`); no third-party
   imagery.
-- **Pytest test suite** (50 tests) covering FSM, vision, HIL, config,
+- **Pytest test suite** (61 tests) covering FSM, vision, HIL, config,
   agent decisions, and end-to-end demo execution.
 - **GitHub Actions CI** (`.github/workflows/test.yml`) running the test
   suite on push and pull request.

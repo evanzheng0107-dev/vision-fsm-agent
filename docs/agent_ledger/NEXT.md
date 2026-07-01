@@ -6,48 +6,49 @@
 
 ## Current Stage
 
-Day 3 — v0.1.0 release preparation.
+**Paused** — Day 3 release material preparation (partial). Awaiting user
+instruction to continue.
 
-## Current Task
+## What's Done So Far
 
-Prepare v0.1.0 release materials and finalize release workflow evidence.
+- Day 0: Repository refactor + governance files (commit a3dd112)
+- Day 0: Maintenance ledger + oss_readiness_check (commit 7648a13)
+- Day 1: README Quick Demo + docs/demo.md (commit b655318)
+- Day 1b: 15 engineering gap fixes (commit b415c91)
+- Day 2: CONTRIBUTING + Development Setup + PR template verify (commit 2a03092)
+- Day 3 (partial): docs/releases/v0.1.0.md updated, CHANGELOG fixed,
+  RELEASE_PLAN rewritten, CODEX_OSS_APPLICATION updated (uncommitted)
 
-## Acceptance Criteria
+## What's Pending (Day 3 completion)
 
-- `docs/releases/v0.1.0.md` is complete and consistent with CHANGELOG
-- `CHANGELOG.md` `[0.1.0]` section matches release notes
-- README / LICENSE / SECURITY / AGENTS / docs are complete
-- `pytest tests/ -q` passes
-- `python scripts/oss_readiness_check.py` passes
-- `RELEASE_PLAN.md` updated
-- `CODEX_OSS_APPLICATION.md` updated
-- `PROGRESS.md` updated
-- No risky wording regression
-- All changes committed and pushed
+- [ ] Commit Day 3 partial changes
+- [ ] Push to remote
+- [ ] Create PR to merge `refactor/vision-fsm-agent` → `master`
+- [ ] (After merge) Tag `v0.1.0`
+- [ ] (After tag) Create GitHub Release
 
-## Allowed Files
+## What's After Day 3
 
-- `docs/releases/v0.1.0.md`
-- `CHANGELOG.md`
-- `docs/agent_ledger/RELEASE_PLAN.md`
-- `docs/agent_ledger/CODEX_OSS_APPLICATION.md`
-- `docs/agent_ledger/PROGRESS.md`
-- `docs/agent_ledger/NEXT.md`
-- `README.md` (if release-specific updates needed)
+- Day 4: v0.1.1 maintenance polish (examples, smoke tests)
+- Day 5: Codex application package finalization
 
-## Forbidden Changes
+## Resume Command
 
-- Do not modify `docs/safety-boundaries.md` unless fixing clarity
+When ready to continue, tell the assistant:
+
+```
+继续 Day 3：commit 当前改动并 push，然后准备创建 PR
+```
+
+Or to skip to a different day:
+
+```
+跳过 Day 3 剩余部分，直接开始 Day 4
+```
+
+## Forbidden Changes (always)
+
 - Do not reintroduce game-specific wording
-- Do not remove tests
-- Do not modify `src/` code
-- Do not create the GitHub Release (tag only after explicit user approval)
-
-## Next Round Prompt (after Day 3 completion)
-
-```
-/goal complete v0.1.1 maintenance polish for Vision FSM Agent: improve
-custom FSM examples, add expected output docs, add or update smoke tests,
-update CHANGELOG and PROGRESS, run pytest and oss_readiness_check, ensure
-no risky wording regression, commit and push.
-```
+- Do not modify safety boundaries
+- Do not push without explicit user approval
+- Do not create GitHub Release without explicit user approval

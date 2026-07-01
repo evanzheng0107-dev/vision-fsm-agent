@@ -1,6 +1,6 @@
 # Codex for Open Source Application Draft
 
-> Working draft. Not yet submitted. Updated as evidence accumulates.
+> Working draft. Updated as evidence accumulates.
 
 ---
 
@@ -12,19 +12,33 @@ A lightweight Python framework for building computer-vision-driven
 automation agents with finite-state-machine control and human-in-the-loop
 correction.
 
+**URL**: https://github.com/evanzheng0107-dev/sword-legend-explorer
+**Branch**: `refactor/vision-fsm-agent` (pushed, PR pending merge to `master`)
+**License**: MIT
+**Version**: 0.1.0 (pending tag)
+
 ## Maintainer Role
 
 I am the primary maintainer of Vision FSM Agent. I define the project
 direction, maintain the roadmap, review changes, manage releases, update
 documentation, maintain tests, and enforce safety boundaries.
 
+Over the past 3 days I have:
+- Refactored the project from a game-specific prototype into a
+  general-purpose, safe, educational framework
+- Committed 5 incremental, well-documented changes with conventional
+  commit messages
+- Pushed all changes to a public feature branch
+- Maintained a detailed change log and maintenance ledger
+
 ## Repository Qualification
 
 Vision FSM Agent is a public Python framework for computer-vision-driven
 automation agents with finite-state-machine control and human-in-the-loop
-correction. It provides a reproducible synthetic demo, tests, CI, safety
-boundaries, and documentation for researchers and developers exploring
-visual agents in controlled local environments.
+correction. It provides a reproducible synthetic demo, 61 tests, CI (test
++ lint), safety boundaries, complete OSS governance, and documentation
+for researchers and developers exploring visual agents in controlled local
+environments.
 
 The project was refactored from a game-specific prototype into a
 public-safe, general-purpose framework. It now uses a synthetic demo
@@ -60,36 +74,40 @@ documented in `docs/safety-boundaries.md`.
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| Public repo | Pending | Repo to be renamed to `vision-fsm-agent` and confirmed public |
+| Public repo | ✅ | https://github.com/evanzheng0107-dev/sword-legend-explorer |
+| Branch pushed | ✅ | `refactor/vision-fsm-agent` (5 commits) |
 | License | ✅ | MIT (`LICENSE`) |
-| CI | ✅ | `.github/workflows/test.yml` (Ubuntu + Windows, Python 3.9–3.13) |
-| Tests | ✅ | 50 pytest tests, all passing |
-| Release | Pending | v0.1.0 code complete, awaiting commit + tag |
-| Issues | Pending | 5–8 issues to be created (drafts in NEXT.md) |
-| PRs | Pending | 2–3 PR-ready commits planned |
-| Docs | ✅ | README (12 sections), architecture, HIL workflow, safety boundaries |
+| CI | ✅ | test.yml (matrix) + lint.yml (ruff/mypy/bandit) |
+| Tests | ✅ | 61 pytest tests, all passing |
+| Release | Pending | v0.1.0 code complete, docs/releases/v0.1.0.md ready, awaiting tag |
+| Issues | Pending | To be created on GitHub |
+| PRs | Pending | PR for branch merge pending |
+| Docs | ✅ | README (14 sections), architecture, demo, HIL workflow, safety boundaries, troubleshooting, API reference (5 files), releases |
 | Safety boundaries | ✅ | `docs/safety-boundaries.md`, `SECURITY.md`, `AGENTS.md` |
 | AGENTS.md | ✅ | Present with safety rules and contribution policy |
-| Changelog | ✅ | `CHANGELOG.md` (Keep a Changelog format) |
-| Maintenance evidence | In progress | `docs/agent_ledger/` with 7 tracking files |
-| OSS readiness check | ✅ | `scripts/oss_readiness_check.py` with risky word scan |
+| Changelog | ✅ | `CHANGELOG.md` (Keep a Changelog format, with link definitions) |
+| Maintenance evidence | ✅ | `docs/agent_ledger/` with 7 tracking files (PROGRESS P001–P004) |
+| OSS readiness check | ✅ | `scripts/oss_readiness_check.py` — 66 files OK, 0 missing, 0 risky |
+| Code quality | ✅ | pre-commit config, ruff/mypy/bandit config, py.typed |
+| Packaging | ✅ | pyproject.toml with scripts, extras, tool config |
+| Contributing guide | ✅ | CONTRIBUTING.md with Development Setup, Makefile, pre-commit |
+| Citation | ✅ | CITATION.cff |
 
 ## Application Short Statement (≤500 characters)
 
 Vision FSM Agent is a public Python framework for CV-driven automation
 with FSM control and human-in-the-loop correction. It features a
-reproducible synthetic demo, 50 tests, CI, safety boundaries, and
-complete OSS governance. I will use API credits for documentation, test
-generation, issue triage, release notes, and human-reviewed LLM-assisted
-development.
+reproducible synthetic demo, 61 tests, CI (test + lint), safety
+boundaries, and complete OSS governance. I will use API credits for
+documentation, test generation, issue triage, release notes, and
+human-reviewed LLM-assisted development.
 
 ## Remaining Steps
 
-1. Commit all changes (awaiting user approval)
-2. Rename repo to `vision-fsm-agent` on GitHub
-3. Push and tag `v0.1.0`
+1. Merge `refactor/vision-fsm-agent` → `master` (via PR)
+2. Tag `v0.1.0` on `master`
+3. Create GitHub Release with release notes
 4. Create 5–8 GitHub issues
-5. Complete Day 1–5 maintenance tasks
-6. Create `v0.1.1` tag after Day 4
-7. Finalize `docs/codex-for-oss-application.md`
-8. Submit application after 3–5 days of visible maintenance
+5. Complete Day 4–5 maintenance tasks
+6. Finalize `docs/codex-for-oss-application.md`
+7. Submit application after visible maintenance activity
