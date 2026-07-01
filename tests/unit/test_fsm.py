@@ -1,6 +1,6 @@
 """Tests for the finite-state-machine engine."""
 import pytest
-from fsm import FiniteStateMachine
+from vision_fsm_agent.fsm import FiniteStateMachine
 
 
 def test_initial_state():
@@ -106,7 +106,7 @@ def test_can_fire():
 
 def test_demo_fsm_builds():
     """The standard demo FSM should build without error and have transitions."""
-    from main import build_demo_fsm
+    from vision_fsm_agent.main import build_demo_fsm
 
     fsm = build_demo_fsm()
     assert fsm.current_state == "IDLE"

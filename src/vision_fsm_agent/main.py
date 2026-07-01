@@ -10,8 +10,8 @@ This module ties together the framework's pieces into a runnable loop:
 The loop is *environment-agnostic*. An :class:`Environment` provides frames
 and executes actions. Two implementations ship with the project:
 
-  * ``demo_app.visual_grid_world.DemoEnvironment`` - a fully synthetic,
-    headless, reproducible grid world (the default).
+  * :class:`~vision_fsm_agent.envs.grid_world.DemoEnvironment` - a fully
+    synthetic, headless, reproducible grid world (the default).
   * :class:`LiveEnvironment` - captures a screen region with ``mss`` and
     clicks with ``pyautogui`` (opt-in, requires a window; **not** used by
     default).
@@ -79,7 +79,7 @@ class LiveEnvironment:
 
     This is the *only* component that touches the real OS. It is **not**
     used by default. To enable it pass ``--live`` and configure
-    ``capture_region`` in ``config.yaml`` to a region you are authorised
+    ``capture_region`` in config to a region you are authorised
     to control.
 
     Safety: ``pyautogui.FAILSAFE`` is left at its default ``True`` so that
@@ -102,7 +102,6 @@ class LiveEnvironment:
             "width": int(region[2]),
             "height": int(region[3]),
         }
-        # Keep PyAutoGUI's failsafe ON (default) for safety.
         pyautogui.PAUSE = 0.1
         self._pyautogui = pyautogui
         logger.warning(
@@ -130,7 +129,6 @@ class LiveEnvironment:
             x = params.get("x")
             y = params.get("y")
             if x is not None and y is not None:
-                # Small deterministic click; no anti-detection jitter.
                 self._pyautogui.click(int(x), int(y))
                 logger.info("Live click at (%d, %d)", int(x), int(y))
 
@@ -142,34 +140,6 @@ class LiveEnvironment:
 
 
 # ----------------------------------------------------------------------
-# Configuration loading
-# ----------------------------------------------------------------------
-def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
-    """Load a YAML config file, searching common locations."""
-    import yaml
-
-    candidates = []
-    if config_path:
-        candidates.append(config_path)
-    candidates.extend(
-        [
-            os.path.join(os.getcwd(), "config.yaml"),
-            os.path.join(os.getcwd(), "configs", "config.yaml"),
-            os.path.join(os.path.dirname(__file__), "..", "config.yaml"),
-        ]
-    )
-    for path in candidates:
-        path = os.path.normpath(path)
-        if os.path.exists(path):
-            with open(path, "r", encoding="utf-8") as f:
-                config = yaml.safe_load(f) or {}
-            logger.info("Config loaded: %s", path)
-            return config
-    logger.warning("No config.yaml found; using defaults")
-    return {}
-
-
-# ----------------------------------------------------------------------
 # FSM wiring for the demo agent
 # ----------------------------------------------------------------------
 def build_demo_fsm():
@@ -178,7 +148,7 @@ def build_demo_fsm():
     States: IDLE -> MOVE -> IDLE,  IDLE -> PICKUP -> IDLE,
             IDLE -> INTERACT -> WAIT -> IDLE,  IDLE -> EXPLORE -> IDLE
     """
-    from fsm import FiniteStateMachine
+    from .fsm import FiniteStateMachine
 
     fsm = FiniteStateMachine("IDLE")
     fsm.add_transition("IDLE", "FOUND_TARGET", "MOVE", description="target detected")
@@ -215,7 +185,7 @@ class AgentLoop:
     use_hil:
         Whether to poll the HIL server each iteration.
     decision_agent:
-        A :class:`~src.agent.DecisionAgent`. Defaults to local rules.
+        A :class:`~vision_fsm_agent.agent.DecisionAgent`. Defaults to local rules.
     """
 
     def __init__(
@@ -236,7 +206,7 @@ class AgentLoop:
         self.running = True
 
         # Vision
-        from vision import TemplateManager
+        from .vision import TemplateManager
 
         scale_range = tuple(config.get("scale_range", [0.6, 1.4]))
         scale_steps = int(config.get("scale_steps", 10))
@@ -248,7 +218,7 @@ class AgentLoop:
 
         # Decision
         if decision_agent is None:
-            from agent import LocalDecisionAgent
+            from .agent import LocalDecisionAgent
 
             decision_agent = LocalDecisionAgent(
                 failure_threshold=int(config.get("max_failed_attempts", 3))
@@ -258,7 +228,7 @@ class AgentLoop:
         # HIL
         self.hil = None
         if use_hil:
-            from hil_client import HilClient
+            from .hil.client import HilClient
 
             self.hil = HilClient(config)
 
@@ -281,7 +251,6 @@ class AgentLoop:
         """Turn a list of MatchResults into the match_results dict."""
         out: Dict[str, Dict[str, Any]] = {}
         for r in results:
-            # Map template name prefixes to semantic categories.
             name = r.template_name.lower()
             if name.startswith("interact") or name.startswith("button"):
                 key = "interact"
@@ -291,7 +260,6 @@ class AgentLoop:
                 key = "target"
             else:
                 key = "other"
-            # Keep the best per category.
             if key not in out or r.confidence > out[key].get("confidence", 0):
                 out[key] = {
                     "found": r.found,
@@ -317,10 +285,8 @@ class AgentLoop:
         elif action == "wait":
             self.fsm.fire("TOO_MANY_FAILURES")
 
-        # Hand the action to the environment.
         self.env.perform_action(action)
 
-        # Resolve the FSM back toward IDLE for the next iteration.
         if action == "move":
             self.fsm.fire("ARRIVED")
         elif action == "pickup":
@@ -390,10 +356,7 @@ class AgentLoop:
 
     # ------------------------------------------------------------------
     def run(self, max_steps: Optional[int] = None) -> None:
-        """Run the loop until ``running`` is False or ``max_steps`` reached.
-
-        In demo mode ``max_steps`` caps the run so it terminates cleanly.
-        """
+        """Run the loop until ``running`` is False or ``max_steps`` reached."""
         logger.info(
             "Agent loop starting (env=%s, fsm=%s, hil=%s, steps=%s)",
             type(self.env).__name__,
@@ -421,28 +384,32 @@ class AgentLoop:
 
 
 # ----------------------------------------------------------------------
-# Entry point
+# Entry points
 # ----------------------------------------------------------------------
 def run_demo(config: Dict[str, Any], *, max_steps: int = 50, use_hil: bool = False) -> None:
     """Run the agent against the synthetic demo environment."""
-    # Import here to avoid importing opencv/numpy at module load.
-    demo_path = os.path.join(os.path.dirname(__file__), "..", "demo_app")
-    demo_path = os.path.normpath(demo_path)
-    if demo_path not in sys.path:
-        sys.path.insert(0, demo_path)
-    from visual_grid_world import DemoEnvironment  # type: ignore
+    from .envs.grid_world import DemoEnvironment
 
     env = DemoEnvironment(config)
     loop = AgentLoop(env, config, use_hil=use_hil)
 
-    # Load demo templates into the vision manager.
-    demo_assets = os.path.join(os.path.dirname(__file__), "..", "assets", "demo")
-    demo_assets = os.path.normpath(demo_assets)
-    loaded = loop.vision.load_directory(demo_assets)
+    # Load demo templates.
+    pkg_dir = os.path.dirname(__file__)
+    candidates = [
+        os.path.join(os.getcwd(), "examples", "visual_grid_world", "assets"),
+        os.path.join(pkg_dir, "..", "..", "examples", "visual_grid_world", "assets"),
+        os.path.join(pkg_dir, "..", "..", "assets", "demo"),  # legacy
+    ]
+    loaded = 0
+    for assets_dir in candidates:
+        assets_dir = os.path.normpath(assets_dir)
+        if os.path.isdir(assets_dir):
+            loaded = loop.vision.load_directory(assets_dir)
+            if loaded > 0:
+                break
     if loaded == 0:
         logger.warning(
-            "No demo templates found in %s. Run scripts/generate_demo_assets.py first.",
-            demo_assets,
+            "No demo templates found. Run scripts/generate_demo_assets.py first."
         )
     else:
         logger.info("Loaded %d demo templates", loaded)
@@ -455,29 +422,3 @@ def run_live(config: Dict[str, Any], *, use_hil: bool = False) -> None:
     env = LiveEnvironment(config)
     loop = AgentLoop(env, config, use_hil=use_hil)
     loop.run()
-
-
-def main(argv=None) -> None:
-    """CLI entry: ``python -m src.main [--start] [--live] [--hil] [--steps N]``."""
-    argv = argv if argv is not None else sys.argv[1:]
-    use_hil = "--hil" in argv
-    live = "--live" in argv
-    config = load_config()
-
-    max_steps = int(config.get("demo_max_steps", 50))
-    if "--steps" in argv:
-        idx = argv.index("--steps")
-        if idx + 1 < len(argv):
-            try:
-                max_steps = int(argv[idx + 1])
-            except ValueError:
-                pass
-
-    if live:
-        run_live(config, use_hil=use_hil)
-    else:
-        run_demo(config, max_steps=max_steps, use_hil=use_hil)
-
-
-if __name__ == "__main__":  # pragma: no cover
-    main()

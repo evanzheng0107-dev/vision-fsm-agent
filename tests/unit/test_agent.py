@@ -1,7 +1,7 @@
 """Tests for the decision agents (src/agent.py)."""
 import pytest
 
-from agent import (
+from vision_fsm_agent.agent import (
     LocalDecisionAgent,
     CloudDecisionAgent,
     DecisionAgent,

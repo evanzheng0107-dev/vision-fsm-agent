@@ -3,8 +3,8 @@ import os
 import numpy as np
 import pytest
 
-from vision import TemplateManager, MatchResult, multi_scale_match
-from visual_grid_world import (
+from vision_fsm_agent.vision import TemplateManager, MatchResult, multi_scale_match
+from vision_fsm_agent.envs.grid_world import (
     DemoEnvironment,
     make_goal_template,
     make_item_template,
@@ -99,8 +99,8 @@ def test_match_one_unknown_template():
 
 def test_assets_demo_exists():
     """The generated demo assets should exist on disk."""
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    assets = os.path.join(root, "assets", "demo")
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    assets = os.path.join(root, "examples", "visual_grid_world", "assets")
     assert os.path.isdir(assets)
     for name in ("target_goal.png", "pickup_item.png", "interact_button.png"):
         assert os.path.exists(os.path.join(assets, name)), f"Missing {name}"

@@ -4,9 +4,10 @@ import sys
 import pytest
 import numpy as np
 
-from visual_grid_world import DemoEnvironment, make_goal_template, make_item_template, make_button_template
-from main import AgentLoop, load_config
-from vision import TemplateManager
+from vision_fsm_agent.envs.grid_world import DemoEnvironment, make_goal_template, make_item_template, make_button_template
+from vision_fsm_agent.main import AgentLoop
+from vision_fsm_agent.config import load_config
+from vision_fsm_agent.vision import TemplateManager
 
 
 @pytest.fixture
@@ -77,8 +78,8 @@ def test_agent_loop_runs_steps(config, env):
     """The full agent loop should run a few steps without error."""
     loop = AgentLoop(env, config, use_hil=False)
     # Load templates.
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    assets = os.path.join(root, "assets", "demo")
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    assets = os.path.join(root, "examples", "visual_grid_world", "assets")
     loop.vision.load_directory(assets)
     assert len(loop.vision) > 0
 
@@ -93,8 +94,8 @@ def test_agent_loop_completes_demo(config):
     """Given enough steps, the agent should collect all items and press buttons."""
     env = DemoEnvironment(config)
     loop = AgentLoop(env, config, use_hil=False)
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    loop.vision.load_directory(os.path.join(root, "assets", "demo"))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    loop.vision.load_directory(os.path.join(root, "examples", "visual_grid_world", "assets"))
 
     for _ in range(60):
         loop.step()
@@ -109,8 +110,8 @@ def test_agent_loop_completes_demo(config):
 def test_fsm_transitions_during_run(config, env):
     """The FSM should record transitions during a run."""
     loop = AgentLoop(env, config, use_hil=False)
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    loop.vision.load_directory(os.path.join(root, "assets", "demo"))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    loop.vision.load_directory(os.path.join(root, "examples", "visual_grid_world", "assets"))
 
     for _ in range(10):
         loop.step()

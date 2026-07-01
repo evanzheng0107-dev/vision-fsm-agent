@@ -1,7 +1,7 @@
 """Tests for config loading."""
 import pytest
 
-from main import load_config
+from vision_fsm_agent.config import load_config
 
 
 def test_load_config_finds_yaml():

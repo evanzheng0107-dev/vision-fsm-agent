@@ -1,7 +1,7 @@
 """Tests for the HIL server and client."""
 import pytest
 
-from hil_server import app
+from vision_fsm_agent.hil.server import app
 
 
 @pytest.fixture
@@ -93,7 +93,7 @@ def test_reset(client):
 
 def test_hil_client_validation():
     """The HilClient validation logic should reject malformed corrections."""
-    from hil_client import HilClient
+    from vision_fsm_agent.hil.client import HilClient
 
     assert HilClient._validate_correction({"type": "none"}) is True
     assert HilClient._validate_correction({

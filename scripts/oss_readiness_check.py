@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # ------------------------------------------------------------------
 REQUIRED_FILES = [
     # Governance
-    ("README.md", True, "Project overview with 12 sections"),
+    ("README.md", True, "Project overview"),
     ("LICENSE", True, "MIT license text"),
     ("CONTRIBUTING.md", True, "Contribution guidelines"),
     ("CODE_OF_CONDUCT.md", True, "Contributor Covenant Code of Conduct"),
@@ -47,16 +47,36 @@ REQUIRED_FILES = [
     (".gitignore", True, "Git ignore rules"),
     (".env.example", True, "Example environment variables"),
     (".editorconfig", True, "Editor configuration for consistent style"),
-    ("config.yaml", True, "Default framework configuration"),
+    ("config/default.yaml", True, "Default framework configuration"),
     ("Makefile", True, "Convenience commands for dev workflow"),
     (".pre-commit-config.yaml", True, "Pre-commit hooks configuration"),
-    # Type marker (empty by design — PEP 561 marker is just its presence)
-    ("src/py.typed", True, "PEP 561 typed-package marker", "allow_empty"),
+    # Type marker
+    ("src/vision_fsm_agent/py.typed", True, "PEP 561 typed-package marker", "allow_empty"),
+    # Source package
+    ("src/vision_fsm_agent/__init__.py", True, "Package init with __version__"),
+    ("src/vision_fsm_agent/fsm.py", True, "FSM engine"),
+    ("src/vision_fsm_agent/vision.py", True, "Vision engine"),
+    ("src/vision_fsm_agent/agent.py", True, "Decision agents"),
+    ("src/vision_fsm_agent/main.py", True, "Agent loop"),
+    ("src/vision_fsm_agent/config.py", True, "Configuration loader"),
+    ("src/vision_fsm_agent/cli.py", True, "CLI entry point"),
+    ("src/vision_fsm_agent/hil/__init__.py", True, "HIL subpackage init"),
+    ("src/vision_fsm_agent/hil/client.py", True, "HIL client"),
+    ("src/vision_fsm_agent/hil/server.py", True, "HIL server"),
+    ("src/vision_fsm_agent/envs/__init__.py", True, "Envs subpackage init"),
+    ("src/vision_fsm_agent/envs/grid_world.py", True, "Demo grid world environment"),
+    # Examples
+    ("examples/visual_grid_world/run_demo.py", True, "Demo runner script"),
+    ("examples/visual_grid_world/config.yaml", True, "Demo configuration"),
+    ("examples/visual_grid_world/assets/target_goal.png", True, "Demo template"),
+    ("examples/visual_grid_world/assets/pickup_item.png", True, "Demo template"),
+    ("examples/visual_grid_world/assets/interact_button.png", True, "Demo template"),
+    ("examples/custom_fsm/custom_fsm.py", True, "Custom FSM example"),
     # Documentation
     ("docs/architecture.md", True, "Architecture deep-dive"),
     ("docs/demo.md", True, "Demo walkthrough"),
     ("docs/hil-workflow.md", True, "HIL API reference"),
-    ("docs/safety-boundaries.md", True, "Safety boundaries and permitted uses"),
+    ("docs/safety-boundaries.md", True, "Safety boundaries"),
     ("docs/troubleshooting.md", True, "Troubleshooting guide"),
     ("docs/api/README.md", True, "API reference index"),
     ("docs/api/fsm.md", True, "FSM API reference"),
@@ -67,15 +87,15 @@ REQUIRED_FILES = [
     # Doc site
     ("mkdocs.yml", False, "MkDocs documentation site config"),
     (".readthedocs.yaml", False, "ReadTheDocs configuration"),
-    # Maintenance ledger
-    ("docs/agent_ledger/README.md", True, "Maintenance ledger directory guide"),
-    ("docs/agent_ledger/SESSION_START.md", True, "Session start context"),
-    ("docs/agent_ledger/NEXT.md", True, "Current next task"),
-    ("docs/agent_ledger/PROGRESS.md", True, "Work round progress log"),
-    ("docs/agent_ledger/DECISIONS.md", True, "Key decisions record"),
-    ("docs/agent_ledger/ERRORS.md", True, "Errors and risks log"),
-    ("docs/agent_ledger/RELEASE_PLAN.md", True, "Release plan"),
-    ("docs/agent_ledger/CODEX_OSS_APPLICATION.md", True, "Codex OSS application draft"),
+    # Maintainer docs
+    ("docs/maintainer/CODEX_OSS_APPLICATION.md", True, "Codex OSS application draft"),
+    ("docs/maintainer/RELEASE_PLAN.md", True, "Release plan"),
+    ("docs/maintainer/agent_ledger/README.md", True, "Maintenance ledger guide"),
+    ("docs/maintainer/agent_ledger/SESSION_START.md", True, "Session start context"),
+    ("docs/maintainer/agent_ledger/NEXT.md", True, "Current next task"),
+    ("docs/maintainer/agent_ledger/PROGRESS.md", True, "Work round progress log"),
+    ("docs/maintainer/agent_ledger/DECISIONS.md", True, "Key decisions record"),
+    ("docs/maintainer/agent_ledger/ERRORS.md", True, "Errors and risks log"),
     # GitHub
     (".github/ISSUE_TEMPLATE/bug_report.yml", True, "Bug report issue template"),
     (".github/ISSUE_TEMPLATE/feature_request.yml", True, "Feature request issue template"),
@@ -88,27 +108,18 @@ REQUIRED_FILES = [
     (".github/FUNDING.yml", False, "Sponsorship configuration"),
     # Dev container
     (".devcontainer/devcontainer.json", False, "Dev container configuration"),
-    # Source
-    ("src/__init__.py", True, "Package init with __version__"),
-    ("src/fsm.py", True, "FSM engine"),
-    ("src/vision.py", True, "Vision engine"),
-    ("src/agent.py", True, "Decision agents"),
-    ("src/hil_client.py", True, "HIL client"),
-    ("src/hil_server.py", True, "HIL server"),
-    ("src/main.py", True, "Agent loop and entry point"),
     # Tests
     ("tests/conftest.py", True, "Pytest configuration"),
-    ("tests/test_fsm.py", True, "FSM tests"),
-    ("tests/test_vision.py", True, "Vision tests"),
-    ("tests/test_hil.py", True, "HIL tests"),
-    ("tests/test_config.py", True, "Config tests"),
-    ("tests/test_agent.py", True, "Agent decision tests"),
-    ("tests/test_demo.py", True, "Demo end-to-end tests"),
-    # Scripts and examples
+    ("tests/unit/test_fsm.py", True, "FSM tests"),
+    ("tests/unit/test_vision.py", True, "Vision tests"),
+    ("tests/unit/test_agent.py", True, "Agent decision tests"),
+    ("tests/unit/test_config.py", True, "Config tests"),
+    ("tests/integration/test_hil.py", True, "HIL tests"),
+    ("tests/integration/test_demo.py", True, "Demo end-to-end tests"),
+    ("tests/smoke/test_demo_run.py", True, "Demo smoke test"),
+    # Scripts
     ("scripts/generate_demo_assets.py", True, "Demo asset generator"),
     ("scripts/oss_readiness_check.py", False, "This script"),
-    ("examples/custom_fsm.py", True, "Custom FSM example"),
-    ("examples/README.md", True, "Examples index"),
 ]
 
 # ------------------------------------------------------------------

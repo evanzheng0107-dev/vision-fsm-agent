@@ -339,34 +339,34 @@ class DemoEnvironment:
 # ---------------------------------------------------------------------------
 # Standalone runner
 # ---------------------------------------------------------------------------
-def _bootstrap_src() -> None:
-    """Add the project root to sys.path so ``src`` is importable."""
-    here = os.path.dirname(os.path.abspath(__file__))
-    root = os.path.normpath(os.path.join(here, ".."))
-    if root not in sys.path:
-        sys.path.insert(0, root)
-    src_path = os.path.join(root, "src")
-    if src_path not in sys.path:
-        sys.path.insert(0, src_path)
-
-
 def run_standalone(max_steps: int = 50, save_dir: Optional[str] = None) -> DemoEnvironment:
     """Run the demo end-to-end and return the final environment state.
 
     If ``save_dir`` is given, each frame is written there as a PNG.
     """
-    _bootstrap_src()
-
-    from main import AgentLoop, load_config  # type: ignore
-    from vision import TemplateManager  # type: ignore
+    from ..main import AgentLoop
+    from ..config import load_config
 
     config = load_config()
     env = DemoEnvironment(config)
 
     # Build an agent loop with demo templates.
     loop = AgentLoop(env, config, use_hil=False)
-    assets_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "assets", "demo"))
-    loaded = loop.vision.load_directory(assets_dir)
+
+    # Search for assets in the new examples/ location first, then legacy.
+    pkg_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    candidates = [
+        os.path.join(os.getcwd(), "examples", "visual_grid_world", "assets"),
+        os.path.join(pkg_dir, "examples", "visual_grid_world", "assets"),
+        os.path.join(pkg_dir, "assets", "demo"),  # legacy
+    ]
+    loaded = 0
+    for assets_dir in candidates:
+        assets_dir = os.path.normpath(assets_dir)
+        if os.path.isdir(assets_dir):
+            loaded = loop.vision.load_directory(assets_dir)
+            if loaded > 0:
+                break
     if loaded == 0:
         # Generate assets on the fly so the demo always runs.
         print("[demo] No templates found, generating them now...")

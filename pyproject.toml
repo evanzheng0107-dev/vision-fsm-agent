@@ -66,7 +66,7 @@ Issues = "https://github.com/evanzheng0107-dev/sword-legend-explorer/issues"
 Changelog = "https://github.com/evanzheng0107-dev/sword-legend-explorer/blob/main/CHANGELOG.md"
 
 [project.scripts]
-vision-fsm-agent = "main:main"
+vision-fsm-agent = "vision_fsm_agent.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -78,7 +78,7 @@ where = ["src"]
 minversion = "7.0"
 testpaths = ["tests"]
 addopts = "-v"
-pythonpath = ["src", "demo_app", "."]
+pythonpath = ["src"]
 
 [tool.coverage.run]
 source = ["src"]

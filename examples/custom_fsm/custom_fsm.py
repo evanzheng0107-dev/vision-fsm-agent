@@ -11,23 +11,22 @@ your own agent — without using the default demo FSM. It shows:
 
 Run::
 
-    python examples/custom_fsm.py
+    python examples/custom_fsm/custom_fsm.py
 """
 
 import os
 import sys
 
-# Bootstrap project paths so src/ and demo_app/ are importable.
+# Ensure src/ is importable.
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.normpath(os.path.join(HERE, ".."))
-for sub in ("src", "demo_app"):
-    p = os.path.join(ROOT, sub)
-    if p not in sys.path:
-        sys.path.insert(0, p)
+ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
+SRC = os.path.join(ROOT, "src")
+if SRC not in sys.path:
+    sys.path.insert(0, SRC)
 
-from fsm import FiniteStateMachine          # noqa: E402
-from vision import TemplateManager           # noqa: E402
-from visual_grid_world import DemoEnvironment  # noqa: E402
+from vision_fsm_agent.fsm import FiniteStateMachine          # noqa: E402
+from vision_fsm_agent.vision import TemplateManager           # noqa: E402
+from vision_fsm_agent.envs.grid_world import DemoEnvironment  # noqa: E402
 
 
 def build_patrol_fsm() -> FiniteStateMachine:
@@ -49,7 +48,8 @@ def main() -> None:
 
     # 2. Vision
     vision = TemplateManager(confidence_threshold=0.7)
-    vision.load_directory(os.path.join(ROOT, "assets", "demo"))
+    assets_dir = os.path.join(ROOT, "examples", "visual_grid_world", "assets")
+    vision.load_directory(assets_dir)
     print(f"Loaded {len(vision)} templates: {vision.names}")
 
     # 3. Environment
@@ -63,11 +63,9 @@ def main() -> None:
         if best.found:
             fsm.fire("SPOTTED", payload={"template": best.template_name,
                                          "confidence": best.confidence})
-            # Simulate handling the element, then return to patrol.
             env.perform_action("pickup" if "pickup" in best.template_name else "move")
             fsm.fire("DONE")
         else:
-            # Nothing found — patrol / explore.
             env.perform_action("explore")
             if step > 3:
                 fsm.fire("STUCK")

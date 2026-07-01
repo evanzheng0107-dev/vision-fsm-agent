@@ -9,9 +9,9 @@ render its frames, guaranteeing that template matching succeeds.
 Usage::
 
     python scripts/generate_demo_assets.py
-    python scripts/generate_demo_assets.py --out assets/demo
+    python scripts/generate_demo_assets.py --out examples/visual_grid_world/assets
 
-Outputs (into assets/demo/ by default):
+Outputs (into examples/visual_grid_world/assets/ by default):
     target_goal.png      - green crosshair navigation target
     pickup_item.png      - gold circle collectible
     interact_button.png  - blue square interactable
@@ -22,21 +22,24 @@ from __future__ import annotations
 import os
 import sys
 
-# Allow running from anywhere in the project.
+# Ensure src/ is importable.
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
-DEMO_PATH = os.path.join(ROOT, "demo_app")
-for p in (ROOT, DEMO_PATH):
-    if p not in sys.path:
-        sys.path.insert(0, p)
+SRC = os.path.join(ROOT, "src")
+if SRC not in sys.path:
+    sys.path.insert(0, SRC)
 
 import cv2  # noqa: E402
 
-from visual_grid_world import make_goal_template, make_item_template, make_button_template  # noqa: E402
+from vision_fsm_agent.envs.grid_world import (  # noqa: E402
+    make_goal_template,
+    make_item_template,
+    make_button_template,
+)
 
 
 def main() -> None:
-    out_dir = os.path.join(ROOT, "assets", "demo")
+    out_dir = os.path.join(ROOT, "examples", "visual_grid_world", "assets")
     if "--out" in sys.argv:
         idx = sys.argv.index("--out")
         out_dir = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else out_dir
