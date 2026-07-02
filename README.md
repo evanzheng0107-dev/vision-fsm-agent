@@ -337,17 +337,19 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 
 ## 13. Roadmap
 
-### v0.1.0 (current)
+### v0.1.x (current)
 - ✅ Core FSM + Vision + HIL framework
 - ✅ Synthetic demo environment
 - ✅ Local + optional cloud decision agents
 - ✅ 63-test pytest suite with CI
+- ✅ Custom FSM example with fallback path demonstration
+- ✅ Standard Python package layout (src/vision_fsm_agent/)
 
 ### v0.2.0 (planned)
-- Additional demo scenarios (multi-agent, dynamic obstacles)
-- Configurable FSM topologies via YAML
-- Vision pipeline extensions (edge detection, feature matching)
-- Web dashboard for HIL corrections
+- Additional demo scenarios (multi-agent, dynamic obstacles) — [#7](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/7)
+- Configurable FSM topologies via YAML — [#5](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/5)
+- Vision pipeline extensions (edge detection, feature matching) — [#6](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/6)
+- HIL correction persistence (SQLite backend) — [#10](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/10)
 
 ### v0.3.0+ (future)
 - Plugin system for custom environments

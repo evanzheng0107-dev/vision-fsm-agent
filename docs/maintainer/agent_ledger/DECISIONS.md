@@ -100,3 +100,23 @@ The oss_readiness_check high-risk word scan uses:
 prohibited concepts ("not intended for cheating"). A naive scan would
 flag these as violations. The exemption strategy balances regression
 detection with documentation needs.
+
+---
+
+## D007 — Codex application finalized
+
+**Date**: 2026-07-02
+**Status**: Confirmed
+
+The Codex for Open Source application package is finalized. All evidence
+checklist items are ✅. The project has:
+- 2 releases (v0.1.0, v0.1.1) with GitHub Releases
+- 4 merged PRs (refactor, 2 dependabot, v0.1.1 polish)
+- 6 open issues (#5–#10) for roadmap and maintenance
+- 63 tests, CI (test + lint), oss_readiness_check PASS
+- Complete OSS governance and documentation
+
+**Rationale**: The application requires visible maintenance activity
+over multiple days. Days 1–5 provide a clear maintenance trajectory
+from initial refactoring through release management to application
+finalization.

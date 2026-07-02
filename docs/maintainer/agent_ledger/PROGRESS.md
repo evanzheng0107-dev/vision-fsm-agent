@@ -4,6 +4,42 @@
 
 ---
 
+## P008 — 2026-07-02 22:55
+
+### Completed
+
+Day 5: Codex for Open Source application package finalization.
+
+- **Updated `docs/maintainer/CODEX_OSS_APPLICATION.md`**: Rewrote from
+  working draft to final application-ready version. Updated all evidence
+  (63 tests, 77 files, v0.1.0 + v0.1.1 released, 4 PRs merged, issues
+  created). Added maintenance timeline table (Day 1–5). All Evidence
+  Checklist items now ✅.
+- **Created 6 GitHub issues** (#5–#10) via GitHub API:
+  - #5: Configurable FSM topologies via YAML (roadmap)
+  - #6: Vision pipeline extensions (roadmap)
+  - #7: Additional demo scenarios (roadmap)
+  - #8: API reference examples with expected output (docs, good first issue)
+  - #9: Property-based tests for FSM (testing)
+  - #10: HIL correction persistence (research)
+- **Updated README roadmap**: v0.1.0 → v0.1.x (current), added issue
+  links to v0.2.0 planned items, added v0.1.1 achievements.
+- **Final validation**: ruff PASS, pytest 63 passed, oss_readiness_check
+  PASS (77 files, 0 risky words).
+
+### Validation
+
+- pytest: **pass** (63 tests)
+- ruff check: **pass**
+- oss_readiness_check: **pass** (77 files, 0 risky)
+- git status: clean
+
+### Next
+
+Project is ready for Codex for Open Source application submission.
+
+---
+
 ## P007 — 2026-07-02 11:45
 
 ### Completed
