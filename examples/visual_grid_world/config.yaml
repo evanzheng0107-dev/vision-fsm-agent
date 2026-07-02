@@ -1,0 +1,58 @@
+# ======================================================================
+# Vision FSM Agent - configuration
+# ======================================================================
+# The defaults below are tuned for the synthetic demo environment so that
+# `python run.py --start` works out of the box with zero external setup.
+# Adjust thresholds and timing for your own environment as needed.
+# See docs/ for details.
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# Environment selection
+# ----------------------------------------------------------------------
+# "demo"  - synthetic grid world (default; no screen capture, fully
+#           reproducible, safe to run anywhere)
+# "live"  - capture a screen region with mss and click with pyautogui.
+#           ONLY use this on systems you own or are authorised to control.
+environment: "demo"
+
+# ----------------------------------------------------------------------
+# Demo environment settings
+# ----------------------------------------------------------------------
+demo_grid_w: 12           # grid width in cells
+demo_grid_h: 12           # grid height in cells
+demo_cell_px: 40          # pixels per cell
+demo_seed: 42             # RNG seed for reproducible world layout
+demo_max_steps: 50        # cap the demo run so it terminates cleanly
+
+# ----------------------------------------------------------------------
+# Vision / template matching
+# ----------------------------------------------------------------------
+confidence_default: 0.75  # default confidence threshold for a "found" match
+scale_range: [0.6, 1.4]   # multi-scale matching range (min, max)
+scale_steps: 10           # number of scale steps (>= 2)
+
+# ----------------------------------------------------------------------
+# FSM / agent loop timing (seconds)
+# ----------------------------------------------------------------------
+loop_delay: [0.3, 0.6]    # delay between loop iterations
+wait_delay: [0.5, 1.0]    # delay when waiting / on failure
+max_failed_attempts: 3    # consecutive failures before entering WAIT
+
+# ----------------------------------------------------------------------
+# HIL (Human-in-the-Loop) correction
+# ----------------------------------------------------------------------
+decision_mode: "local"                  # "local" (rules) or "cloud" (LLM)
+hil_server_url: "http://localhost:8001/hil"
+
+# ----------------------------------------------------------------------
+# Live environment (advanced; only used when environment == "live")
+# ----------------------------------------------------------------------
+# capture_region: [0, 0, 480, 480]      # [x, y, width, height] in pixels
+# window_title: ""                      # informational only
+
+# ----------------------------------------------------------------------
+# Cloud / LLM decision (optional; see .env.example)
+# ----------------------------------------------------------------------
+# Set LLM_API_KEY / LLM_BASE_URL / LLM_MODEL in .env to enable.
+# When no key is present, the agent falls back to local rules.

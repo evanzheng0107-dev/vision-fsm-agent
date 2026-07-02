@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Vision FSM Agent: A lightweight Python framework for computer-vision-driven automation agents with finite-state-machine control and human-in-the-loop correction"
+type: software
+authors:
+  - name: "Vision FSM Agent Contributors"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/evanzheng0107-dev/sword-legend-explorer"
+url: "https://github.com/evanzheng0107-dev/sword-legend-explorer"
+version: "0.1.0"
+date-released: "2026-06-29"
+license: MIT
+keywords:
+  - computer-vision
+  - finite-state-machine
+  - human-in-the-loop
+  - automation
+  - opencv
+  - education
+  - research
+abstract: >-
+  Vision FSM Agent is a lightweight Python framework for building
+  computer-vision-driven automation agents with finite-state-machine
+  control and human-in-the-loop correction. It provides a reproducible
+  synthetic demo, tests, CI, safety boundaries, and documentation for
+  researchers and developers exploring visual agents in controlled local
+  environments.

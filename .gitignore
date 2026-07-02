@@ -45,14 +45,20 @@ Thumbs.db
 backup-v1.0/
 debug_screenshots/
 trigger_screenshots/
+demo_frames/
 *.log
 .env
 .env.local
 *.db
 *.sqlite
 *.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Temporary files
 *.tmp
 *.temp
 *.bak
+_test_*.txt
+push_result.txt

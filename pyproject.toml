@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vision-fsm-agent"
+version = "0.1.0"
+description = "A lightweight Python framework for computer-vision-driven automation agents with finite-state-machine control and human-in-the-loop correction."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Vision FSM Agent Contributors"},
+]
+keywords = ["computer-vision", "finite-state-machine", "automation", "human-in-the-loop", "opencv", "education", "research"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "opencv-python>=4.5",
+    "numpy>=1.21",
+    "pyyaml>=6.0",
+    "Flask>=2.0",
+    "requests>=2.28",
+]
+
+[project.optional-dependencies]
+live = [
+    # Optional: live screen-capture environment. Only needed when
+    # environment == "live" in config.yaml, on systems you own/control.
+    "mss>=9.0",
+    "pyautogui>=0.9",
+    "pygetwindow>=0.0",
+    "keyboard>=0.13",
+]
+cloud = [
+    # Optional: LLM-backed decision agent. Only needed when LLM_API_KEY is set.
+    "python-dotenv>=1.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "bandit>=1.7",
+    "pre-commit>=3.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/evanzheng0107-dev/sword-legend-explorer"
+Repository = "https://github.com/evanzheng0107-dev/sword-legend-explorer"
+Issues = "https://github.com/evanzheng0107-dev/sword-legend-explorer/issues"
+Changelog = "https://github.com/evanzheng0107-dev/sword-legend-explorer/blob/main/CHANGELOG.md"
+
+[project.scripts]
+vision-fsm-agent = "vision_fsm_agent.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-v"
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = [
+    "*/__pycache__/*",
+    "src/vision_fsm_agent/__init__.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[tool.bandit]
+exclude_dirs = ["tests", "demo_frames", "docs"]

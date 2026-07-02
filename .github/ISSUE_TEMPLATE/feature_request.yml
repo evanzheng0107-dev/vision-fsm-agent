@@ -1,0 +1,70 @@
+name: Feature Request
+description: Suggest a new feature or improvement for Vision FSM Agent
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a feature!
+        Please make sure your request aligns with the project's safety boundaries
+        (see docs/safety-boundaries.md). Requests for anti-detection, cheating,
+        botting, or anti-cheat evasion features will be closed.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or motivation
+      description: What problem does this feature solve? Or what use case does it support?
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the solution you'd like. Be as specific as you can.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you considered any alternative solutions or workarounds?
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected component
+      options:
+        - Core FSM engine (src/fsm.py)
+        - Vision engine (src/vision.py)
+        - Decision agent (src/agent.py)
+        - HIL system (src/hil_*.py)
+        - Agent loop (src/main.py)
+        - Demo environment (demo_app/)
+        - Documentation (docs/)
+        - CI / tooling
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checklist
+      options:
+        - label: This feature does NOT involve anti-detection, evasion, or human-mimicry
+          required: true
+        - label: This feature does NOT target specific commercial games or services
+          required: true
+        - label: This feature does NOT bypass platform rules or terms of service
+          required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other context, screenshots, or references.
