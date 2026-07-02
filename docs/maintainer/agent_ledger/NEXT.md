@@ -6,43 +6,30 @@
 
 ## Current Stage
 
-Day 3 complete. Awaiting user to create PR and merge.
+Day 4 complete. v0.1.1 polish committed on `dev/v0.1.1-polish` branch
+(not yet pushed — awaiting user approval).
 
 ## Current Task
 
-User actions required (cannot be automated — no GitHub credentials in
-sandbox):
+User actions required:
 
-1. **Create PR** on GitHub:
-   https://github.com/evanzheng0107-dev/sword-legend-explorer/pull/new/refactor/vision-fsm-agent
-
-   PR title: `refactor: rebrand to Vision FSM Agent with standard package layout`
-
-   PR body: Copy from `docs/releases/v0.1.0.md` Highlights section +
-   note "8 commits, 61 tests, oss_readiness_check passes".
-
-2. **Merge PR** to `master`.
-
-3. **Tag v0.1.0**:
-   ```bash
-   git checkout master
-   git tag v0.1.0
-   git push origin v0.1.0
-   ```
-
-4. **Create GitHub Release** using notes from `docs/releases/v0.1.0.md`.
+1. **Push `dev/v0.1.1-polish`** to origin (when ready).
+2. **Create PR** (`dev/v0.1.1-polish` → `master`) and merge.
+3. **Tag `v0.1.1`** and push tag.
+4. **Create GitHub Release** for v0.1.1 (optional — minor polish).
 
 ## After User Actions
 
-Day 4: v0.1.1 maintenance polish
-- Improve custom FSM example with expected output
-- Add/update smoke tests
-- Update CHANGELOG and PROGRESS
+Day 5: Codex for Open Source application package finalization.
+- Review and finalize `docs/maintainer/CODEX_OSS_APPLICATION.md`
+- Ensure all OSS readiness criteria are met
+- Final documentation sweep
+- Prepare application submission materials
 
-## Day 4 Resume Command
+## Day 5 Resume Command
 
 ```
-开始 Day 4
+开始 Day 5
 ```
 
 ## Forbidden Changes (always)

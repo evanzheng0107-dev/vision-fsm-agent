@@ -4,6 +4,42 @@
 
 ---
 
+## P007 — 2026-07-02 11:45
+
+### Completed
+
+Day 4: v0.1.1 maintenance polish.
+
+- **Improved `examples/custom_fsm/custom_fsm.py`**: rewrote to show
+  intermediate FSM states (PATROL→SCAN→PATROL per step, previously only
+  the final state was printed). Added a simulated sensor-outage phase
+  (steps 6–7) to demonstrate the STUCK→WAIT→READY fallback path, which
+  previously never triggered. Added docstring with expected output.
+- **Updated `examples/README.md`**: fixed stale path
+  (`examples/custom_fsm.py` → `examples/custom_fsm/custom_fsm.py`),
+  added expected-output block and key takeaways for the custom FSM
+  example, added visual_grid_world cross-reference.
+- **Added `tests/smoke/test_custom_fsm.py`**: smoke test verifying the
+  custom FSM example runs end-to-end and exercises both the normal
+  SPOTTED→SCAN→DONE path and the STUCK→WAIT→READY fallback path.
+  Checks for key output markers (Initial state, Transition history,
+  STUCK, WAIT, READY, SPOTTED, SCAN, DONE).
+- **Updated `CHANGELOG.md`**: added `[0.1.1]` section.
+- **Updated `docs/maintainer/agent_ledger/NEXT.md`**: Day 4 done,
+  points to Day 5.
+
+### Validation
+
+- pytest: **pass** (63 tests, +1 new smoke test)
+- smoke tests: **pass** (demo + custom_fsm)
+- custom_fsm example: runs correctly, 16 transitions, WAIT path fires
+
+### Next
+
+Day 5: Codex for Open Source application package finalization.
+
+---
+
 ## P006 — 2026-07-02 09:50
 
 ### Completed

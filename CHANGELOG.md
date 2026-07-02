@@ -7,7 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed — Project reorganization into standard Python package layout
+## [0.1.1] - 2026-07-02
+
+### Changed — v0.1.1 maintenance polish
+- **`examples/custom_fsm/custom_fsm.py`** — Rewrote to display
+  intermediate FSM states within each step (previously only the final
+  state was shown, making the PATROL↔SCAN loop invisible). Added a
+  simulated sensor-outage phase (steps 6–7) so the STUCK→WAIT→READY
+  fallback path actually fires — in v0.1.0 this path existed in the FSM
+  topology but never triggered because vision always matched.
+- **`examples/README.md`** — Fixed stale path
+  (`examples/custom_fsm.py` → `examples/custom_fsm/custom_fsm.py`),
+  added expected-output block and expanded key takeaways for the custom
+  FSM example.
+
+### Added
+- **`tests/smoke/test_custom_fsm.py`** — Smoke test verifying the custom
+  FSM example runs end-to-end and exercises both the normal
+  SPOTTED→SCAN→DONE path and the STUCK→WAIT→READY fallback path.
+  Test count: 62 → 63.
+
+## [0.1.0] - 2026-06-29
 - **Core code moved** from flat `src/*.py` to `src/vision_fsm_agent/` package
   with subpackages: `hil/`, `envs/`, `decision/`, `actions/`, `utils/`.
 - **`config.py` and `cli.py`** extracted from `main.py` for single-responsibility.
@@ -166,5 +186,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/evanzheng0107-dev/sword-legend-explorer/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/evanzheng0107-dev/sword-legend-explorer/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/evanzheng0107-dev/sword-legend-explorer/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/evanzheng0107-dev/sword-legend-explorer/releases/tag/v0.1.0

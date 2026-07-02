@@ -341,7 +341,7 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 - ✅ Core FSM + Vision + HIL framework
 - ✅ Synthetic demo environment
 - ✅ Local + optional cloud decision agents
-- ✅ 61-test pytest suite with CI
+- ✅ 63-test pytest suite with CI
 
 ### v0.2.0 (planned)
 - Additional demo scenarios (multi-agent, dynamic obstacles)
@@ -391,7 +391,7 @@ vision-fsm-agent/
 ├── tests/
 │   ├── unit/                    FSM, vision, agent, config tests
 │   ├── integration/             HIL, demo end-to-end tests
-│   └── smoke/                   Demo smoke test
+│   └── smoke/                   Demo + custom FSM smoke tests
 ├── config/
 │   ├── default.yaml             Default framework configuration
 │   └── demo.yaml                Demo-specific configuration
