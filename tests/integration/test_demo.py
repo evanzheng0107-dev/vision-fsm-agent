@@ -1,13 +1,14 @@
 """End-to-end tests for the demo environment and agent loop."""
-import os
-import sys
-import pytest
-import numpy as np
 
-from vision_fsm_agent.envs.grid_world import DemoEnvironment, make_goal_template, make_item_template, make_button_template
-from vision_fsm_agent.main import AgentLoop
+import os
+
+import pytest
+
 from vision_fsm_agent.config import load_config
-from vision_fsm_agent.vision import TemplateManager
+from vision_fsm_agent.envs.grid_world import (
+    DemoEnvironment,
+)
+from vision_fsm_agent.main import AgentLoop
 
 
 @pytest.fixture
@@ -39,7 +40,6 @@ def test_env_frame_is_valid_image(env):
 
 
 def test_env_actions_advance_state(env):
-    initial_pos = env.agent_pos
     env.perform_action("explore")
     assert env.step_count == 1
     # explore may or may not move, but step_count must increment

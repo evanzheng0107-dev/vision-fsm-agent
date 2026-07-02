@@ -32,9 +32,9 @@ if SRC not in sys.path:
 import cv2  # noqa: E402
 
 from vision_fsm_agent.envs.grid_world import (  # noqa: E402
+    make_button_template,
     make_goal_template,
     make_item_template,
-    make_button_template,
 )
 
 

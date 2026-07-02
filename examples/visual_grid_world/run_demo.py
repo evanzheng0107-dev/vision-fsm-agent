@@ -9,8 +9,8 @@ Usage::
     python examples/visual_grid_world/run_demo.py --save demo_frames
 """
 
-import sys
 import os
+import sys
 
 # Ensure the package is importable when running this script directly.
 PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -18,8 +18,7 @@ SRC_PATH = os.path.join(PROJECT_ROOT, "src")
 if SRC_PATH not in sys.path:
     sys.path.insert(0, SRC_PATH)
 
-from vision_fsm_agent.envs.grid_world import run_standalone
-
+from vision_fsm_agent.envs.grid_world import run_standalone  # noqa: E402
 
 if __name__ == "__main__":
     max_steps = 50

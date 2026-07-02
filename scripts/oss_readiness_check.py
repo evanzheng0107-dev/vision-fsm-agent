@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Open-Source Readiness Checker for Vision FSM Agent.
 
@@ -21,7 +20,6 @@ Exit code 0 = PASS, 1 = FAIL.
 from __future__ import annotations
 
 import os
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -197,9 +195,18 @@ SCAN_EXTENSIONS = {".py", ".md", ".yaml", ".yml", ".txt", ".example", ".toml", "
 
 # Directories to exclude from scanning
 SCAN_EXCLUDE_DIRS = {
-    ".git", "__pycache__", ".pytest_cache", "venv", "env",
-    ".venv", "demo_frames", ".coverage", "htmlcov",
-    "node_modules", "build", "dist",
+    ".git",
+    "__pycache__",
+    ".pytest_cache",
+    "venv",
+    "env",
+    ".venv",
+    "demo_frames",
+    ".coverage",
+    "htmlcov",
+    "node_modules",
+    "build",
+    "dist",
 }
 
 
@@ -301,17 +308,13 @@ def check_risky_words(verbose: bool = False) -> tuple:
                 for word in RISKY_WORDS_EN:
                     if word in line_lower:
                         if _has_negation_context(lines, i):
-                            en_hits_exempt.append(
-                                (str(rel), i + 1, word, line.strip())
-                            )
+                            en_hits_exempt.append((str(rel), i + 1, word, line.strip()))
                             if verbose:
-                                print(f"  EXEMPT: {rel}:{i+1} -> {word}")
+                                print(f"  EXEMPT: {rel}:{i + 1} -> {word}")
                         else:
-                            en_hits_real.append(
-                                (str(rel), i + 1, word, line.strip())
-                            )
+                            en_hits_real.append((str(rel), i + 1, word, line.strip()))
                             if verbose:
-                                print(f"  HIT:    {rel}:{i+1} -> {word}")
+                                print(f"  HIT:    {rel}:{i + 1} -> {word}")
 
     return cn_hits, en_hits_real, en_hits_exempt, files_scanned
 
@@ -343,12 +346,13 @@ def main() -> None:
         description="Open-Source Readiness Checker for Vision FSM Agent."
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true",
-        help="Print status for every file and every word hit."
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Print status for every file and every word hit.",
     )
     parser.add_argument(
-        "--run-tests", action="store_true",
-        help="Also run pytest after the readiness check."
+        "--run-tests", action="store_true", help="Also run pytest after the readiness check."
     )
     args = parser.parse_args()
 
@@ -367,19 +371,17 @@ def main() -> None:
         overall_pass = False
         for path, desc in missing:
             print(f"      - {path}  ({desc})")
-        actions.append(f"Add missing required files: {', '.join(p for p,_ in missing)}")
+        actions.append(f"Add missing required files: {', '.join(p for p, _ in missing)}")
     if empty:
         overall_pass = False
         for path, desc in empty:
             print(f"      - {path}  ({desc}) [EMPTY]")
-        actions.append(f"Fill empty files: {', '.join(p for p,_ in empty)}")
+        actions.append(f"Fill empty files: {', '.join(p for p, _ in empty)}")
     print()
 
     # --- [2] Risky wording scan ---
     print("[2] Risky wording scan")
-    cn_hits, en_real, en_exempt, files_scanned = check_risky_words(
-        verbose=args.verbose
-    )
+    cn_hits, en_real, en_exempt, files_scanned = check_risky_words(verbose=args.verbose)
     print(f"    Files scanned:    {files_scanned}")
     print(f"    Chinese hits:     {len(cn_hits)}  (zero-tolerance)")
     print(f"    English hits:     {len(en_real)}  (real)")
@@ -403,7 +405,7 @@ def main() -> None:
 
     if en_exempt and args.verbose:
         print("\n    English exempted hits (negative context — OK):")
-        for path, line, word, text in en_exempt:
+        for path, line, word, _text in en_exempt:
             print(f"      {path}:{line}  ->  {word}  [EXEMPT]")
     print()
 
@@ -416,7 +418,7 @@ def main() -> None:
         else:
             passed, rc, summary = check_tests()
             if passed:
-                print(f"    pytest: PASS")
+                print("    pytest: PASS")
                 print(f"    {summary}")
             else:
                 print(f"    pytest: FAIL (exit code {rc})")

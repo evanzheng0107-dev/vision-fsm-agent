@@ -10,12 +10,12 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
-def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+def load_config(config_path: str | None = None) -> dict[str, Any]:
     """Load a YAML config file, searching common locations.
 
     Search order:
@@ -47,7 +47,7 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
     for path in candidates:
         path = os.path.normpath(path)
         if os.path.exists(path):
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 config = yaml.safe_load(f) or {}
             logger.info("Config loaded: %s", path)
             return config

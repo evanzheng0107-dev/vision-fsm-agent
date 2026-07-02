@@ -27,7 +27,7 @@ from __future__ import annotations
 import logging
 import os
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
 
@@ -48,7 +48,7 @@ class HilClient:
           * ``script_id`` - unique identifier for this agent run
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         self.config = config or {}
         self.server_url = self.config.get(
             "hil_server_url",
@@ -65,7 +65,7 @@ class HilClient:
     # ------------------------------------------------------------------
     # Corrections
     # ------------------------------------------------------------------
-    def get_manual_correction(self) -> Optional[Dict[str, Any]]:
+    def get_manual_correction(self) -> dict[str, Any] | None:
         """Poll for a pending manual correction.
 
         Returns the correction dict, or ``None`` if nothing is pending or
@@ -99,7 +99,7 @@ class HilClient:
             logger.error("Failed to get correction: %s", exc)
         return None
 
-    def send_status(self, status: Dict[str, Any]) -> bool:
+    def send_status(self, status: dict[str, Any]) -> bool:
         """Report the current agent state to the HIL server."""
         try:
             payload = {
@@ -121,7 +121,7 @@ class HilClient:
             logger.debug("Status report error: %s", exc)
         return False
 
-    def send_correction_to_agent(self, correction: Dict[str, Any]) -> bool:
+    def send_correction_to_agent(self, correction: dict[str, Any]) -> bool:
         """Forward a manual correction to the decision agent for learning."""
         if not correction:
             return False
@@ -146,7 +146,7 @@ class HilClient:
             logger.error("Forward correction error: %s", exc)
         return False
 
-    def get_agent_decision(self, agent_state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def get_agent_decision(self, agent_state: dict[str, Any]) -> dict[str, Any] | None:
         """Request a learned decision from the HIL/decision service."""
         try:
             payload = {
@@ -174,7 +174,7 @@ class HilClient:
     # Validation
     # ------------------------------------------------------------------
     @staticmethod
-    def _validate_correction(correction: Dict[str, Any]) -> bool:
+    def _validate_correction(correction: dict[str, Any]) -> bool:
         """Validate that a correction dict has the required fields."""
         if correction.get("type") == "none":
             return True

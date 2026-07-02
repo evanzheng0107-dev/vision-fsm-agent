@@ -1,4 +1,5 @@
 """Tests for the HIL server and client."""
+
 import pytest
 
 from vision_fsm_agent.hil.server import app
@@ -83,9 +84,10 @@ def test_get_decision_stub(client):
 
 
 def test_reset(client):
-    client.post("/hil/set_correction", json={
-        "type": "correct", "action": "click", "correct_params": {"x": 1, "y": 2}
-    })
+    client.post(
+        "/hil/set_correction",
+        json={"type": "correct", "action": "click", "correct_params": {"x": 1, "y": 2}},
+    )
     resp = client.post("/hil/reset")
     assert resp.status_code == 200
     assert client.get("/hil/status").get_json()["correction_count"] == 0
@@ -96,10 +98,14 @@ def test_hil_client_validation():
     from vision_fsm_agent.hil.client import HilClient
 
     assert HilClient._validate_correction({"type": "none"}) is True
-    assert HilClient._validate_correction({
-        "type": "correct", "action": "click", "correct_params": {"x": 1, "y": 2}
-    }) is True
+    assert (
+        HilClient._validate_correction(
+            {"type": "correct", "action": "click", "correct_params": {"x": 1, "y": 2}}
+        )
+        is True
+    )
     assert HilClient._validate_correction({"type": "correct"}) is False
-    assert HilClient._validate_correction({
-        "type": "correct", "action": "click", "correct_params": {}
-    }) is False
+    assert (
+        HilClient._validate_correction({"type": "correct", "action": "click", "correct_params": {}})
+        is False
+    )

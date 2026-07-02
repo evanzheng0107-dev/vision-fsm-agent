@@ -32,7 +32,7 @@ from __future__ import annotations
 import os
 import random
 import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import cv2
 import numpy as np
@@ -47,7 +47,7 @@ import numpy as np
 CELL = 40  # pixels per grid cell
 
 
-def _new_canvas(width: int, height: int, color: Tuple[int, int, int] = (32, 32, 32)) -> np.ndarray:
+def _new_canvas(width: int, height: int, color: tuple[int, int, int] = (32, 32, 32)) -> np.ndarray:
     """Create a solid-color BGR canvas."""
     canvas = np.zeros((height, width, 3), dtype=np.uint8)
     canvas[:] = color
@@ -139,7 +139,7 @@ class DemoEnvironment:
     The world is deterministic given the same seed, making runs reproducible.
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         config = config or {}
         self.grid_w = int(config.get("demo_grid_w", 12))
         self.grid_h = int(config.get("demo_grid_h", 12))
@@ -148,24 +148,24 @@ class DemoEnvironment:
         self._rng = random.Random(self.seed)
 
         # Agent starts at top-left.
-        self.agent_pos: Tuple[int, int] = (0, 0)
+        self.agent_pos: tuple[int, int] = (0, 0)
 
         # World contents (grid coordinates).
-        self.goals: List[Tuple[int, int]] = self._scatter(2)
-        self.items: List[Tuple[int, int]] = self._scatter(3, avoid=self.goals)
-        self.buttons: List[Tuple[int, int]] = self._scatter(1, avoid=self.goals + self.items)
+        self.goals: list[tuple[int, int]] = self._scatter(2)
+        self.items: list[tuple[int, int]] = self._scatter(3, avoid=self.goals)
+        self.buttons: list[tuple[int, int]] = self._scatter(1, avoid=self.goals + self.items)
 
         # Mutable state.
         self.collected: set = set()  # indices into self.items
         self.pressed: set = set()  # indices into self.buttons
         self.step_count = 0
-        self.action_log: List[str] = []
+        self.action_log: list[str] = []
 
     # -- helpers --
-    def _scatter(self, n: int, avoid: Optional[List[Tuple[int, int]]] = None) -> List[Tuple[int, int]]:
+    def _scatter(self, n: int, avoid: list[tuple[int, int]] | None = None) -> list[tuple[int, int]]:
         """Place ``n`` elements at random non-overlapping grid positions."""
         avoid = avoid or []
-        placed: List[Tuple[int, int]] = []
+        placed: list[tuple[int, int]] = []
         occupied = set(avoid) | {(0, 0)}  # keep start clear
         attempts = 0
         while len(placed) < n and attempts < 200:
@@ -177,7 +177,7 @@ class DemoEnvironment:
             attempts += 1
         return placed
 
-    def _grid_to_pixel(self, gx: int, gy: int) -> Tuple[int, int]:
+    def _grid_to_pixel(self, gx: int, gy: int) -> tuple[int, int]:
         """Convert grid coords to pixel center of the cell."""
         return (gx * self.cell + self.cell // 2, gy * self.cell + self.cell // 2)
 
@@ -198,7 +198,7 @@ class DemoEnvironment:
             cv2.line(canvas, (0, gy * self.cell), (w, gy * self.cell), (50, 50, 50), 1)
 
         # Goals
-        for (gx, gy) in self.goals:
+        for gx, gy in self.goals:
             px, py = self._grid_to_pixel(gx, gy)
             render_goal(canvas, px, py)
 
@@ -233,7 +233,7 @@ class DemoEnvironment:
         )
         return canvas
 
-    def perform_action(self, action: str, params: Optional[Dict[str, Any]] = None) -> None:
+    def perform_action(self, action: str, params: dict[str, Any] | None = None) -> None:
         """Advance the world by one step in response to an agent action."""
         params = params or {}
         self.step_count += 1
@@ -266,7 +266,7 @@ class DemoEnvironment:
         target = min(self.goals, key=lambda g: self._dist(self.agent_pos, g))
         self._step_towards(target)
 
-    def _step_towards(self, target: Tuple[int, int]) -> None:
+    def _step_towards(self, target: tuple[int, int]) -> None:
         ax, ay = self.agent_pos
         tx, ty = target
         if ax < tx:
@@ -285,7 +285,9 @@ class DemoEnvironment:
         for i, (gx, gy) in enumerate(self.items):
             if i in self.collected:
                 continue
-            if nearest is None or self._dist(self.agent_pos, (gx, gy)) < self._dist(self.agent_pos, nearest):
+            if nearest is None or self._dist(self.agent_pos, (gx, gy)) < self._dist(
+                self.agent_pos, nearest
+            ):
                 nearest, nearest_i = (gx, gy), i
         if nearest is None:
             return
@@ -300,7 +302,9 @@ class DemoEnvironment:
         for i, (gx, gy) in enumerate(self.buttons):
             if i in self.pressed:
                 continue
-            if nearest is None or self._dist(self.agent_pos, (gx, gy)) < self._dist(self.agent_pos, nearest):
+            if nearest is None or self._dist(self.agent_pos, (gx, gy)) < self._dist(
+                self.agent_pos, nearest
+            ):
                 nearest, nearest_i = (gx, gy), i
         if nearest is None:
             return
@@ -318,11 +322,11 @@ class DemoEnvironment:
         self.agent_pos = (ax, ay)
 
     @staticmethod
-    def _dist(a: Tuple[int, int], b: Tuple[int, int]) -> int:
+    def _dist(a: tuple[int, int], b: tuple[int, int]) -> int:
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
     # -- status --
-    def status(self) -> Dict[str, Any]:
+    def status(self) -> dict[str, Any]:
         return {
             "agent_pos": self.agent_pos,
             "step_count": self.step_count,
@@ -339,13 +343,13 @@ class DemoEnvironment:
 # ---------------------------------------------------------------------------
 # Standalone runner
 # ---------------------------------------------------------------------------
-def run_standalone(max_steps: int = 50, save_dir: Optional[str] = None) -> DemoEnvironment:
+def run_standalone(max_steps: int = 50, save_dir: str | None = None) -> DemoEnvironment:
     """Run the demo end-to-end and return the final environment state.
 
     If ``save_dir`` is given, each frame is written there as a PNG.
     """
-    from ..main import AgentLoop
     from ..config import load_config
+    from ..main import AgentLoop
 
     config = load_config()
     env = DemoEnvironment(config)
@@ -374,19 +378,24 @@ def run_standalone(max_steps: int = 50, save_dir: Optional[str] = None) -> DemoE
         loop.vision.load_directory(assets_dir)
 
     print(f"[demo] Loaded {len(loop.vision)} templates")
-    print(f"[demo] World: {env.grid_w}x{env.grid_h}, goals={env.goals}, "
-          f"items={len(env.items)}, buttons={len(env.buttons)}")
+    print(
+        f"[demo] World: {env.grid_w}x{env.grid_h}, goals={env.goals}, "
+        f"items={len(env.items)}, buttons={len(env.buttons)}"
+    )
     print(f"[demo] Running {max_steps} steps...\n")
 
     os.makedirs(save_dir, exist_ok=True) if save_dir else None
 
     for i in range(max_steps):
-        state = loop.step()
+        loop.step()
         st = env.status()
-        bar = _progress_bar(st["items_collected"], st["items_total"],
-                            st["buttons_pressed"], st["buttons_total"])
-        print(f"  step {st['step_count']:>3} | fsm={loop.fsm.current_state:<8} "
-              f"pos={st['agent_pos']} | {bar}")
+        bar = _progress_bar(
+            st["items_collected"], st["items_total"], st["buttons_pressed"], st["buttons_total"]
+        )
+        print(
+            f"  step {st['step_count']:>3} | fsm={loop.fsm.current_state:<8} "
+            f"pos={st['agent_pos']} | {bar}"
+        )
         if save_dir:
             frame = env.get_frame()
             cv2.imwrite(os.path.join(save_dir, f"frame_{i:03d}.png"), frame)

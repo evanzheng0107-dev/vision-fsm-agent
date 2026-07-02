@@ -1,5 +1,5 @@
 """Tests for the finite-state-machine engine."""
-import pytest
+
 from vision_fsm_agent.fsm import FiniteStateMachine
 
 

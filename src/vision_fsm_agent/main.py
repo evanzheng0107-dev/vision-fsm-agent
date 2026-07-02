@@ -34,9 +34,8 @@ from __future__ import annotations
 import logging
 import os
 import random
-import sys
 import time
-from typing import Any, Dict, Optional, Protocol
+from typing import Any, Protocol
 
 import numpy as np
 
@@ -53,17 +52,17 @@ logging.basicConfig(
 class Environment(Protocol):
     """Interface that an agent loop drives."""
 
-    def get_frame(self) -> Optional[np.ndarray]:
+    def get_frame(self) -> np.ndarray | None:
         """Return the current frame as a BGR ``np.ndarray``, or ``None``."""
         ...
 
-    def perform_action(self, action: str, params: Optional[Dict[str, Any]] = None) -> None:
+    def perform_action(self, action: str, params: dict[str, Any] | None = None) -> None:
         """Execute ``action`` (e.g. ``move``, ``pickup``, ``interact``)."""
         ...
 
     @property
     def bounds(self) -> tuple:
-        """ ``(width, height)`` of the frame in pixels."""
+        """``(width, height)`` of the frame in pixels."""
         ...
 
     def close(self) -> None:
@@ -86,16 +85,14 @@ class LiveEnvironment:
     moving the mouse to a screen corner aborts input instantly.
     """
 
-    def __init__(self, config: Dict[str, Any]) -> None:
+    def __init__(self, config: dict[str, Any]) -> None:
         import pyautogui  # noqa: F401  (import to configure)
         from mss import mss
 
         self._mss = mss()
         region = config.get("capture_region")
         if not region or len(region) != 4:
-            raise ValueError(
-                "LiveEnvironment requires 'capture_region' [x, y, w, h] in config"
-            )
+            raise ValueError("LiveEnvironment requires 'capture_region' [x, y, w, h] in config")
         self.region = {
             "left": int(region[0]),
             "top": int(region[1]),
@@ -113,7 +110,7 @@ class LiveEnvironment:
     def bounds(self) -> tuple:
         return (self.region["width"], self.region["height"])
 
-    def get_frame(self) -> Optional[np.ndarray]:
+    def get_frame(self) -> np.ndarray | None:
         import cv2
 
         try:
@@ -123,7 +120,7 @@ class LiveEnvironment:
             logger.error("Capture failed: %s", exc)
             return None
 
-    def perform_action(self, action: str, params: Optional[Dict[str, Any]] = None) -> None:
+    def perform_action(self, action: str, params: dict[str, Any] | None = None) -> None:
         params = params or {}
         if action in ("move", "pickup", "interact", "click"):
             x = params.get("x")
@@ -164,7 +161,9 @@ def build_demo_fsm():
 
     fsm.add_transition("IDLE", "NO_TARGET", "EXPLORE", description="nothing detected")
     fsm.add_transition("EXPLORE", "EXPLORED", "IDLE", description="explored a step")
-    fsm.add_transition("EXPLORE", "FOUND_TARGET", "MOVE", description="found target while exploring")
+    fsm.add_transition(
+        "EXPLORE", "FOUND_TARGET", "MOVE", description="found target while exploring"
+    )
 
     fsm.add_transition("IDLE", "TOO_MANY_FAILURES", "WAIT", description="retry budget exhausted")
     return fsm
@@ -191,7 +190,7 @@ class AgentLoop:
     def __init__(
         self,
         environment: Environment,
-        config: Dict[str, Any],
+        config: dict[str, Any],
         *,
         use_hil: bool = False,
         decision_agent=None,
@@ -238,7 +237,7 @@ class AgentLoop:
         self.max_failed_attempts = int(config.get("max_failed_attempts", 3))
 
     # ------------------------------------------------------------------
-    def _build_agent_state(self, match_results: Dict[str, Any]) -> Dict[str, Any]:
+    def _build_agent_state(self, match_results: dict[str, Any]) -> dict[str, Any]:
         return {
             "current_state": self.fsm.current_state,
             "match_results": match_results,
@@ -247,9 +246,9 @@ class AgentLoop:
             "loop_count": self.loop_count,
         }
 
-    def _classify_matches(self, results) -> Dict[str, Dict[str, Any]]:
+    def _classify_matches(self, results) -> dict[str, dict[str, Any]]:
         """Turn a list of MatchResults into the match_results dict."""
-        out: Dict[str, Dict[str, Any]] = {}
+        out: dict[str, dict[str, Any]] = {}
         for r in results:
             name = r.template_name.lower()
             if name.startswith("interact") or name.startswith("button"):
@@ -269,7 +268,7 @@ class AgentLoop:
                 }
         return out
 
-    def _apply_decision(self, decision: Dict[str, Any]) -> None:
+    def _apply_decision(self, decision: dict[str, Any]) -> None:
         action = decision.get("action", "continue")
         reason = decision.get("reason", "")
         logger.info("Decision: %s - %s", action, reason)
@@ -300,7 +299,7 @@ class AgentLoop:
             self.fsm.fire("READY")
 
     # ------------------------------------------------------------------
-    def step(self) -> Dict[str, Any]:
+    def step(self) -> dict[str, Any]:
         """Run a single iteration of the loop. Returns the agent state."""
         self.loop_count += 1
 
@@ -355,7 +354,7 @@ class AgentLoop:
         return agent_state
 
     # ------------------------------------------------------------------
-    def run(self, max_steps: Optional[int] = None) -> None:
+    def run(self, max_steps: int | None = None) -> None:
         """Run the loop until ``running`` is False or ``max_steps`` reached."""
         logger.info(
             "Agent loop starting (env=%s, fsm=%s, hil=%s, steps=%s)",
@@ -386,7 +385,7 @@ class AgentLoop:
 # ----------------------------------------------------------------------
 # Entry points
 # ----------------------------------------------------------------------
-def run_demo(config: Dict[str, Any], *, max_steps: int = 50, use_hil: bool = False) -> None:
+def run_demo(config: dict[str, Any], *, max_steps: int = 50, use_hil: bool = False) -> None:
     """Run the agent against the synthetic demo environment."""
     from .envs.grid_world import DemoEnvironment
 
@@ -408,16 +407,14 @@ def run_demo(config: Dict[str, Any], *, max_steps: int = 50, use_hil: bool = Fal
             if loaded > 0:
                 break
     if loaded == 0:
-        logger.warning(
-            "No demo templates found. Run scripts/generate_demo_assets.py first."
-        )
+        logger.warning("No demo templates found. Run scripts/generate_demo_assets.py first.")
     else:
         logger.info("Loaded %d demo templates", loaded)
 
     loop.run(max_steps=max_steps)
 
 
-def run_live(config: Dict[str, Any], *, use_hil: bool = False) -> None:
+def run_live(config: dict[str, Any], *, use_hil: bool = False) -> None:
     """Run the agent against a live screen region (advanced)."""
     env = LiveEnvironment(config)
     loop = AgentLoop(env, config, use_hil=use_hil)

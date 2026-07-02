@@ -30,7 +30,7 @@ import json
 import logging
 import os
 import re
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ ACTIONS = ("move", "pickup", "interact", "explore", "wait", "continue")
 class DecisionAgent:
     """Base interface for decision agents."""
 
-    def get_decision(self, agent_state: Dict[str, Any]) -> Dict[str, Any]:
+    def get_decision(self, agent_state: dict[str, Any]) -> dict[str, Any]:
         raise NotImplementedError
 
 
@@ -66,7 +66,7 @@ class LocalDecisionAgent(DecisionAgent):
         self.failure_threshold = failure_threshold
         self.decision_count = 0
 
-    def get_decision(self, agent_state: Dict[str, Any]) -> Dict[str, Any]:
+    def get_decision(self, agent_state: dict[str, Any]) -> dict[str, Any]:
         self.decision_count += 1
         matches = agent_state.get("match_results", {})
 
@@ -107,14 +107,12 @@ class CloudDecisionAgent(DecisionAgent):
     :class:`LocalDecisionAgent` so the agent loop never blocks.
     """
 
-    def __init__(self, fallback: Optional[DecisionAgent] = None) -> None:
+    def __init__(self, fallback: DecisionAgent | None = None) -> None:
         # Import here so the module loads even if requests is unavailable.
         import requests  # noqa: F401  (ensure available)
 
         self.api_key = os.getenv("LLM_API_KEY")
-        self.api_url = os.getenv(
-            "LLM_BASE_URL", "https://api.openai.com/v1"
-        )
+        self.api_url = os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")
         self.model = os.getenv("LLM_MODEL", "gpt-3.5-turbo")
         self.fallback = fallback or LocalDecisionAgent()
         self._json_pattern = re.compile(r"\{.*\}", re.DOTALL)
@@ -123,7 +121,7 @@ class CloudDecisionAgent(DecisionAgent):
         else:
             logger.info("CloudDecisionAgent has no API key; will use local fallback")
 
-    def _extract_json(self, text: str) -> Optional[dict]:
+    def _extract_json(self, text: str) -> dict | None:
         """Best-effort extraction of a JSON object from model output."""
         try:
             return json.loads(text)
@@ -138,7 +136,7 @@ class CloudDecisionAgent(DecisionAgent):
                 pass
         return None
 
-    def get_decision(self, agent_state: Dict[str, Any]) -> Dict[str, Any]:
+    def get_decision(self, agent_state: dict[str, Any]) -> dict[str, Any]:
         if not self.api_key:
             return self.fallback.get_decision(agent_state)
         try:

@@ -110,9 +110,7 @@ def send_correction():
         data = request.get_json(silent=True)
         if not data:
             return jsonify({"error": "missing JSON body"}), 400
-        learning_store["learning_history"].append(
-            {"data": data, "received_at": time.time()}
-        )
+        learning_store["learning_history"].append({"data": data, "received_at": time.time()})
         _trim(learning_store["learning_history"])
         logger.info("Learning data recorded")
         return jsonify({"status": "success", "message": "learning data recorded"}), 200
@@ -128,9 +126,7 @@ def send_status():
         data = request.get_json(silent=True)
         if not data:
             return jsonify({"error": "missing JSON body"}), 400
-        learning_store["status_history"].append(
-            {"data": data, "received_at": time.time()}
-        )
+        learning_store["status_history"].append({"data": data, "received_at": time.time()})
         _trim(learning_store["status_history"])
         return jsonify({"status": "success", "message": "status recorded"}), 200
     except Exception as exc:  # pragma: no cover

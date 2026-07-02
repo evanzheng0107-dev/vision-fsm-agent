@@ -23,10 +23,10 @@ jobs:
           pip install ruff mypy bandit
 
       - name: Run ruff check
-        run: ruff check src/ tests/ demo_app/ scripts/ examples/
+        run: ruff check src/ tests/ scripts/ examples/
 
       - name: Run ruff format check
-        run: ruff format --check src/ tests/ demo_app/ scripts/ examples/
+        run: ruff format --check src/ tests/ scripts/ examples/
 
       - name: Run mypy
         run: mypy src/ --ignore-missing-imports || true

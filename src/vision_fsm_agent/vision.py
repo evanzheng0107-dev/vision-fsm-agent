@@ -25,7 +25,6 @@ from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
 
 import cv2
 import numpy as np
@@ -39,10 +38,10 @@ class MatchResult:
 
     found: bool
     confidence: float
-    position: Tuple[int, int]  # top-left of best match in the frame
-    center: Tuple[int, int]  # center of the matched template region
+    position: tuple[int, int]  # top-left of best match in the frame
+    center: tuple[int, int]  # center of the matched template region
     template_name: str = ""
-    template_shape: Optional[Tuple[int, int]] = None  # (h, w) of matched template
+    template_shape: tuple[int, int] | None = None  # (h, w) of matched template
 
     def __repr__(self) -> str:  # pragma: no cover - trivial
         status = "FOUND" if self.found else "miss"
@@ -58,9 +57,9 @@ class MatchResult:
 def multi_scale_match(
     template: np.ndarray,
     screenshot: np.ndarray,
-    scale_range: Tuple[float, float] = (0.6, 1.4),
+    scale_range: tuple[float, float] = (0.6, 1.4),
     scale_steps: int = 10,
-) -> Tuple[float, Tuple[int, int]]:
+) -> tuple[float, tuple[int, int]]:
     """Match ``template`` against ``screenshot`` across multiple scales.
 
     Parameters
@@ -135,13 +134,13 @@ class TemplateManager:
     def __init__(
         self,
         confidence_threshold: float = 0.8,
-        scale_range: Tuple[float, float] = (0.6, 1.4),
+        scale_range: tuple[float, float] = (0.6, 1.4),
         scale_steps: int = 10,
     ) -> None:
         self.confidence_threshold = confidence_threshold
         self.scale_range = scale_range
         self.scale_steps = scale_steps
-        self._templates: Dict[str, np.ndarray] = {}
+        self._templates: dict[str, np.ndarray] = {}
 
     # -- loading --
     def add_from_array(self, name: str, template: np.ndarray) -> None:
@@ -166,9 +165,7 @@ class TemplateManager:
         logger.debug("Loaded template %r from %s shape=%s", name, path, img.shape)
         return True
 
-    def load_directory(
-        self, directory: str, prefix: str = "", suffix: str = ".png"
-    ) -> int:
+    def load_directory(self, directory: str, prefix: str = "", suffix: str = ".png") -> int:
         """Load all image files in ``directory`` matching ``prefix``/``suffix``.
 
         Returns the number of templates loaded.
@@ -190,7 +187,7 @@ class TemplateManager:
 
     # -- inspection --
     @property
-    def names(self) -> List[str]:
+    def names(self) -> list[str]:
         return list(self._templates.keys())
 
     def __len__(self) -> int:
@@ -205,9 +202,7 @@ class TemplateManager:
         template = self._templates.get(name)
         if template is None:
             return MatchResult(False, 0.0, (0, 0), (0, 0), template_name=name)
-        val, pos = multi_scale_match(
-            template, frame, self.scale_range, self.scale_steps
-        )
+        val, pos = multi_scale_match(template, frame, self.scale_range, self.scale_steps)
         th, tw = template.shape[:2]
         center = (pos[0] + tw // 2, pos[1] + th // 2)
         return MatchResult(
@@ -231,7 +226,7 @@ class TemplateManager:
                 best = res
         return best
 
-    def match_all(self, frame: np.ndarray) -> List[MatchResult]:
+    def match_all(self, frame: np.ndarray) -> list[MatchResult]:
         """Match every template, returning a list sorted by confidence desc."""
         results = [self.match_one(name, frame) for name in self._templates]
         results.sort(key=lambda r: r.confidence, reverse=True)

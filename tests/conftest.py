@@ -1,4 +1,5 @@
 """Pytest configuration: make vision_fsm_agent importable."""
+
 import os
 import sys
 

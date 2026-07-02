@@ -23,7 +23,7 @@ from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field
-from typing import Callable, Deque, Dict, List, Optional, Tuple
+from typing import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +42,8 @@ class Transition:
     source: str
     event: str
     target: str
-    guard: Optional[Guard] = None
-    action: Optional[Action] = None
+    guard: Guard | None = None
+    action: Action | None = None
     description: str = ""
 
     def __repr__(self) -> str:  # pragma: no cover - trivial
@@ -86,13 +86,13 @@ class FiniteStateMachine:
     def __init__(self, initial_state: str, history_limit: int = 200) -> None:
         self._state: str = initial_state
         self._initial: str = initial_state
-        self._transitions: List[Transition] = []
-        self._on_enter: Dict[str, List[Action]] = {}
-        self._on_exit: Dict[str, List[Action]] = {}
-        self._history: Deque[TransitionRecord] = deque(maxlen=history_limit)
+        self._transitions: list[Transition] = []
+        self._on_enter: dict[str, list[Action]] = {}
+        self._on_exit: dict[str, list[Action]] = {}
+        self._history: deque[TransitionRecord] = deque(maxlen=history_limit)
         # Track how many times each (source, event) has been attempted but
         # blocked by a guard. Useful for failure-retry logic.
-        self._blocked_count: Dict[Tuple[str, str], int] = {}
+        self._blocked_count: dict[tuple[str, str], int] = {}
 
     # ------------------------------------------------------------------
     # Configuration
@@ -111,22 +111,20 @@ class FiniteStateMachine:
         event: str,
         target: str,
         *,
-        guard: Optional[Guard] = None,
-        action: Optional[Action] = None,
+        guard: Guard | None = None,
+        action: Action | None = None,
         description: str = "",
-    ) -> "FiniteStateMachine":
+    ) -> FiniteStateMachine:
         """Register a transition. Returns self for chaining."""
-        self._transitions.append(
-            Transition(source, event, target, guard, action, description)
-        )
+        self._transitions.append(Transition(source, event, target, guard, action, description))
         return self
 
-    def on_enter(self, state: str, callback: Action) -> "FiniteStateMachine":
+    def on_enter(self, state: str, callback: Action) -> FiniteStateMachine:
         """Register a callback fired when entering ``state``."""
         self._on_enter.setdefault(state, []).append(callback)
         return self
 
-    def on_exit(self, state: str, callback: Action) -> "FiniteStateMachine":
+    def on_exit(self, state: str, callback: Action) -> FiniteStateMachine:
         """Register a callback fired when leaving ``state``."""
         self._on_exit.setdefault(state, []).append(callback)
         return self
@@ -134,18 +132,16 @@ class FiniteStateMachine:
     # ------------------------------------------------------------------
     # Querying
     # ------------------------------------------------------------------
-    def available_events(self) -> List[str]:
+    def available_events(self) -> list[str]:
         """Events that are valid *from the current state*."""
-        return sorted(
-            {t.event for t in self._transitions if t.source == self._state}
-        )
+        return sorted({t.event for t in self._transitions if t.source == self._state})
 
     def can_fire(self, event: str) -> bool:
         """Whether ``event`` has at least one matching rule right now."""
         return any(t.source == self._state and t.event == event for t in self._transitions)
 
     @property
-    def history(self) -> List[TransitionRecord]:
+    def history(self) -> list[TransitionRecord]:
         return list(self._history)
 
     def blocked_count(self, source: str, event: str) -> int:
@@ -154,7 +150,7 @@ class FiniteStateMachine:
     # ------------------------------------------------------------------
     # Core engine
     # ------------------------------------------------------------------
-    def fire(self, event: str, payload: Optional[dict] = None) -> bool:
+    def fire(self, event: str, payload: dict | None = None) -> bool:
         """Attempt to transition on ``event``.
 
         Returns True if a transition occurred, False if no matching rule
@@ -169,20 +165,16 @@ class FiniteStateMachine:
                 self._blocked_count[(self._state, event)] = (
                     self._blocked_count.get((self._state, event), 0) + 1
                 )
-                logger.debug(
-                    "Transition %s blocked by guard (event=%s)", t, event
-                )
+                logger.debug("Transition %s blocked by guard (event=%s)", t, event)
                 return False
             # Execute the transition
             self._execute(t, payload)
             return True
         # No matching rule at all
-        logger.debug(
-            "No transition for event=%r from state=%r", event, self._state
-        )
+        logger.debug("No transition for event=%r from state=%r", event, self._state)
         return False
 
-    def force_state(self, state: str, payload: Optional[dict] = None) -> None:
+    def force_state(self, state: str, payload: dict | None = None) -> None:
         """Directly jump to ``state`` without firing an event.
 
         This bypasses on_exit callbacks of the old state but still runs
@@ -190,9 +182,7 @@ class FiniteStateMachine:
         """
         old = self._state
         self._state = state
-        self._history.append(
-            TransitionRecord(old, "__force__", state, payload or {})
-        )
+        self._history.append(TransitionRecord(old, "__force__", state, payload or {}))
         for cb in self._on_enter.get(state, []):
             cb(self, payload or {})
         logger.info("Force-set state %r -> %r", old, state)
@@ -221,12 +211,8 @@ class FiniteStateMachine:
         for cb in self._on_enter.get(transition.target, []):
             cb(self, payload)
         # record
-        self._history.append(
-            TransitionRecord(old, transition.event, transition.target, payload)
-        )
-        logger.info(
-            "FSM %s --[%s]--> %s", old, transition.event, transition.target
-        )
+        self._history.append(TransitionRecord(old, transition.event, transition.target, payload))
+        logger.info("FSM %s --[%s]--> %s", old, transition.event, transition.target)
 
     def __repr__(self) -> str:  # pragma: no cover - trivial
         return f"<FiniteStateMachine state={self._state!r} rules={len(self._transitions)}>"

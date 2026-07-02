@@ -1,11 +1,12 @@
 """Tests for the decision agents (src/agent.py)."""
+
 import pytest
 
 from vision_fsm_agent.agent import (
-    LocalDecisionAgent,
+    ACTIONS,
     CloudDecisionAgent,
     DecisionAgent,
-    ACTIONS,
+    LocalDecisionAgent,
 )
 
 
@@ -154,9 +155,7 @@ def test_cloud_agent_extract_json():
         "action": "move",
         "reason": "test",
     }
-    assert agent._extract_json('```json\n{"action": "wait"}\n```') == {
-        "action": "wait"
-    }
+    assert agent._extract_json('```json\n{"action": "wait"}\n```') == {"action": "wait"}
     assert agent._extract_json("not json at all") is None
 
 

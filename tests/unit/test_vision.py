@@ -1,15 +1,17 @@
 """Tests for the vision / template-matching engine."""
+
 import os
+
 import numpy as np
 import pytest
 
-from vision_fsm_agent.vision import TemplateManager, MatchResult, multi_scale_match
 from vision_fsm_agent.envs.grid_world import (
     DemoEnvironment,
+    make_button_template,
     make_goal_template,
     make_item_template,
-    make_button_template,
 )
+from vision_fsm_agent.vision import MatchResult, TemplateManager, multi_scale_match
 
 
 @pytest.fixture

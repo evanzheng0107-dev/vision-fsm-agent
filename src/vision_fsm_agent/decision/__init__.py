@@ -1,10 +1,10 @@
 """Decision subpackage. Re-exports agents for convenience."""
 
 from ..agent import (
+    ACTIONS,
+    CloudDecisionAgent,
     DecisionAgent,
     LocalDecisionAgent,
-    CloudDecisionAgent,
-    ACTIONS,
 )
 
 __all__ = [

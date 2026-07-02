@@ -1,5 +1,4 @@
 """Tests for config loading."""
-import pytest
 
 from vision_fsm_agent.config import load_config
 

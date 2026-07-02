@@ -24,9 +24,9 @@ SRC = os.path.join(ROOT, "src")
 if SRC not in sys.path:
     sys.path.insert(0, SRC)
 
-from vision_fsm_agent.fsm import FiniteStateMachine          # noqa: E402
-from vision_fsm_agent.vision import TemplateManager           # noqa: E402
 from vision_fsm_agent.envs.grid_world import DemoEnvironment  # noqa: E402
+from vision_fsm_agent.fsm import FiniteStateMachine  # noqa: E402
+from vision_fsm_agent.vision import TemplateManager  # noqa: E402
 
 
 def build_patrol_fsm() -> FiniteStateMachine:
@@ -61,8 +61,9 @@ def main() -> None:
         best = vision.match_best(frame)
 
         if best.found:
-            fsm.fire("SPOTTED", payload={"template": best.template_name,
-                                         "confidence": best.confidence})
+            fsm.fire(
+                "SPOTTED", payload={"template": best.template_name, "confidence": best.confidence}
+            )
             env.perform_action("pickup" if "pickup" in best.template_name else "move")
             fsm.fire("DONE")
         else:
@@ -71,9 +72,11 @@ def main() -> None:
                 fsm.fire("STUCK")
                 fsm.fire("READY")
 
-        print(f"  step {step + 1}: state={fsm.current_state:<8} "
-              f"best={best.template_name}({best.confidence:.2f}) "
-              f"pos={env.agent_pos}")
+        print(
+            f"  step {step + 1}: state={fsm.current_state:<8} "
+            f"best={best.template_name}({best.confidence:.2f}) "
+            f"pos={env.agent_pos}"
+        )
 
     # 5. Show transition history
     print(f"\nTransition history ({len(fsm.history)} transitions):")

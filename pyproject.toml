@@ -85,7 +85,7 @@ source = ["src"]
 branch = true
 omit = [
     "*/__pycache__/*",
-    "src/__init__.py",
+    "src/vision_fsm_agent/__init__.py",
 ]
 
 [tool.coverage.report]
@@ -109,7 +109,6 @@ ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["B011"]
-"demo_app/*" = ["B011"]
 
 [tool.mypy]
 python_version = "3.9"
