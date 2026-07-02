@@ -2,48 +2,47 @@
 
 ## Current Date
 
-2026-07-01
+2026-07-02
 
 ## Current Stage
 
-**Paused** — Day 3 release material preparation (partial). Awaiting user
-instruction to continue.
+Day 3 complete. Awaiting user to create PR and merge.
 
-## What's Done So Far
+## Current Task
 
-- Day 0: Repository refactor + governance files (commit a3dd112)
-- Day 0: Maintenance ledger + oss_readiness_check (commit 7648a13)
-- Day 1: README Quick Demo + docs/demo.md (commit b655318)
-- Day 1b: 15 engineering gap fixes (commit b415c91)
-- Day 2: CONTRIBUTING + Development Setup + PR template verify (commit 2a03092)
-- Day 3 (partial): docs/releases/v0.1.0.md updated, CHANGELOG fixed,
-  RELEASE_PLAN rewritten, CODEX_OSS_APPLICATION updated (uncommitted)
+User actions required (cannot be automated — no GitHub credentials in
+sandbox):
 
-## What's Pending (Day 3 completion)
+1. **Create PR** on GitHub:
+   https://github.com/evanzheng0107-dev/sword-legend-explorer/pull/new/refactor/vision-fsm-agent
 
-- [ ] Commit Day 3 partial changes
-- [ ] Push to remote
-- [ ] Create PR to merge `refactor/vision-fsm-agent` → `master`
-- [ ] (After merge) Tag `v0.1.0`
-- [ ] (After tag) Create GitHub Release
+   PR title: `refactor: rebrand to Vision FSM Agent with standard package layout`
 
-## What's After Day 3
+   PR body: Copy from `docs/releases/v0.1.0.md` Highlights section +
+   note "8 commits, 61 tests, oss_readiness_check passes".
 
-- Day 4: v0.1.1 maintenance polish (examples, smoke tests)
-- Day 5: Codex application package finalization
+2. **Merge PR** to `master`.
 
-## Resume Command
+3. **Tag v0.1.0**:
+   ```bash
+   git checkout master
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
 
-When ready to continue, tell the assistant:
+4. **Create GitHub Release** using notes from `docs/releases/v0.1.0.md`.
+
+## After User Actions
+
+Day 4: v0.1.1 maintenance polish
+- Improve custom FSM example with expected output
+- Add/update smoke tests
+- Update CHANGELOG and PROGRESS
+
+## Day 4 Resume Command
 
 ```
-继续 Day 3：commit 当前改动并 push，然后准备创建 PR
-```
-
-Or to skip to a different day:
-
-```
-跳过 Day 3 剩余部分，直接开始 Day 4
+开始 Day 4
 ```
 
 ## Forbidden Changes (always)

@@ -20,7 +20,7 @@ tag creation.
 - [x] CODE_OF_CONDUCT present
 - [x] AGENTS present
 - [x] CHANGELOG updated (with link definitions)
-- [x] demo_app runs (`python demo_app/visual_grid_world.py --steps 20`)
+- [x] demo runs (`python examples/visual_grid_world/run_demo.py --steps 20`)
 - [x] pytest passes (61 tests)
 - [x] GitHub Actions configured (test + lint workflows)
 - [x] Safety boundaries documented
@@ -60,7 +60,7 @@ See [`docs/releases/v0.1.0.md`](../releases/v0.1.0.md).
 
 ### Scope
 
-- [x] Maintenance ledger (`docs/agent_ledger/` 7 files)
+- [x] Maintenance ledger (`docs/maintainer/agent_ledger/` 7 files)
 - [x] OSS readiness check with risky word scan
 - [x] `.gitignore` updated (`.coverage`)
 - [x] CHANGELOG updated
@@ -95,7 +95,7 @@ See [`docs/releases/v0.1.0.md`](../releases/v0.1.0.md).
 - Educational lab exercises
 - CI integration of `oss_readiness_check.py`
 - Relative imports (remove sys.path hack)
-- Split `src/main.py` into environment.py + config.py + loop.py
+- Split `src/vision_fsm_agent/main.py` into environment.py + config.py + loop.py
 - Coverage target 80%+
 
 ---

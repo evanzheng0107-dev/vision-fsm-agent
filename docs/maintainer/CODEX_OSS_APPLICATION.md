@@ -86,7 +86,7 @@ documented in `docs/safety-boundaries.md`.
 | Safety boundaries | ✅ | `docs/safety-boundaries.md`, `SECURITY.md`, `AGENTS.md` |
 | AGENTS.md | ✅ | Present with safety rules and contribution policy |
 | Changelog | ✅ | `CHANGELOG.md` (Keep a Changelog format, with link definitions) |
-| Maintenance evidence | ✅ | `docs/agent_ledger/` with 7 tracking files (PROGRESS P001–P004) |
+| Maintenance evidence | ✅ | `docs/maintainer/agent_ledger/` with 7 tracking files (PROGRESS P001–P004) |
 | OSS readiness check | ✅ | `scripts/oss_readiness_check.py` — 66 files OK, 0 missing, 0 risky |
 | Code quality | ✅ | pre-commit config, ruff/mypy/bandit config, py.typed |
 | Packaging | ✅ | pyproject.toml with scripts, extras, tool config |

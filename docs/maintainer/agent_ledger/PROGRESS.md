@@ -4,6 +4,35 @@
 
 ---
 
+## P006 — 2026-07-02 09:50
+
+### Completed
+
+Day 3 (final): v0.1.0 release material verification and path sync.
+
+- Verified all release materials reference correct paths after the
+  project reorganization (commit 8c87554 + 009efb3).
+- Fixed stale paths in `docs/releases/v0.1.0.md`,
+  `docs/maintainer/RELEASE_PLAN.md`, and
+  `docs/maintainer/CODEX_OSS_APPLICATION.md`.
+- All 8 commits are pushed to `origin/refactor/vision-fsm-agent`.
+- PR-ready: branch is clean, tests pass, oss_readiness_check passes.
+
+### Validation
+
+- pytest: **pass** (61 tests)
+- oss_readiness_check: **pass** (76 files OK, 0 missing, 0 risky)
+- demo smoke: **pass**
+- risky wording scan: **pass**
+- git status: clean
+
+### Next
+
+User to create PR on GitHub, merge to master, tag v0.1.0, create release.
+Then Day 4: v0.1.1 maintenance polish.
+
+---
+
 ## P005 — 2026-07-01 11:06
 
 ### Completed
