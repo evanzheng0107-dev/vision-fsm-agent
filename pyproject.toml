@@ -60,10 +60,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/evanzheng0107-dev/sword-legend-explorer"
-Repository = "https://github.com/evanzheng0107-dev/sword-legend-explorer"
-Issues = "https://github.com/evanzheng0107-dev/sword-legend-explorer/issues"
-Changelog = "https://github.com/evanzheng0107-dev/sword-legend-explorer/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/evanzheng0107-dev/vision-fsm-agent"
+Repository = "https://github.com/evanzheng0107-dev/vision-fsm-agent"
+Issues = "https://github.com/evanzheng0107-dev/vision-fsm-agent/issues"
+Changelog = "https://github.com/evanzheng0107-dev/vision-fsm-agent/blob/main/CHANGELOG.md"
 
 [project.scripts]
 vision-fsm-agent = "vision_fsm_agent.cli:main"

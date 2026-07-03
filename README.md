@@ -4,7 +4,7 @@
 
 一个用于研究和教学的 **计算机视觉 + 有限状态机 + HIL 人工纠正** Agent 框架。
 
-[![Tests](https://github.com/evanzheng0107-dev/sword-legend-explorer/actions/workflows/test.yml/badge.svg)](https://github.com/evanzheng0107-dev/sword-legend-explorer/actions/workflows/test.yml)
+[![Tests](https://github.com/evanzheng0107-dev/vision-fsm-agent/actions/workflows/test.yml/badge.svg)](https://github.com/evanzheng0107-dev/vision-fsm-agent/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
@@ -75,8 +75,8 @@ network (except the optional local HIL server). See
 external software required:
 
 ```bash
-git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
-cd sword-legend-explorer
+git clone https://github.com/evanzheng0107-dev/vision-fsm-agent.git
+cd vision-fsm-agent
 pip install -r requirements.txt
 python scripts/generate_demo_assets.py
 python examples/visual_grid_world/run_demo.py --steps 20
@@ -99,8 +99,8 @@ Expected output (the agent navigates, collects items, presses buttons):
 
 ```bash
 # 1. Clone
-git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
-cd sword-legend-explorer
+git clone https://github.com/evanzheng0107-dev/vision-fsm-agent.git
+cd vision-fsm-agent
 
 # 2. Create a virtual environment and install dependencies
 python -m venv venv
@@ -250,8 +250,8 @@ See [`docs/hil-workflow.md`](docs/hil-workflow.md) for the full API.
 ### Quick setup with Make
 
 ```bash
-git clone https://github.com/evanzheng0107-dev/sword-legend-explorer.git
-cd sword-legend-explorer
+git clone https://github.com/evanzheng0107-dev/vision-fsm-agent.git
+cd vision-fsm-agent
 make install   # installs package + dev dependencies
 make assets    # generates demo templates
 make test      # verifies everything works
@@ -346,10 +346,10 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 - ✅ Standard Python package layout (src/vision_fsm_agent/)
 
 ### v0.2.0 (planned)
-- Additional demo scenarios (multi-agent, dynamic obstacles) — [#7](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/7)
-- Configurable FSM topologies via YAML — [#5](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/5)
-- Vision pipeline extensions (edge detection, feature matching) — [#6](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/6)
-- HIL correction persistence (SQLite backend) — [#10](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/10)
+- Additional demo scenarios (multi-agent, dynamic obstacles) — [#7](https://github.com/evanzheng0107-dev/vision-fsm-agent/issues/7)
+- Configurable FSM topologies via YAML — [#5](https://github.com/evanzheng0107-dev/vision-fsm-agent/issues/5)
+- Vision pipeline extensions (edge detection, feature matching) — [#6](https://github.com/evanzheng0107-dev/vision-fsm-agent/issues/6)
+- HIL correction persistence (SQLite backend) — [#10](https://github.com/evanzheng0107-dev/vision-fsm-agent/issues/10)
 
 ### v0.3.0+ (future)
 - Plugin system for custom environments

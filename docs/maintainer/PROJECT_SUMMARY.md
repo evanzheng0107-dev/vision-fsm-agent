@@ -10,7 +10,7 @@ Vision FSM Agent is a lightweight Python framework for building
 computer-vision-driven automation agents with finite-state-machine
 control and human-in-the-loop correction.
 
-- **Repository**: https://github.com/evanzheng0107-dev/sword-legend-explorer
+- **Repository**: https://github.com/evanzheng0107-dev/vision-fsm-agent
 - **License**: MIT
 - **Latest release**: v0.1.1
 - **Tags**: v0.1.0, v0.1.1

@@ -110,7 +110,7 @@ The `tests/conftest.py` adds `src/` to `sys.path`. If you're running
 pytest from a different directory, ensure you're in the project root:
 
 ```bash
-cd /path/to/sword-legend-explorer
+cd /path/to/vision-fsm-agent
 pytest tests/ -q
 ```
 
@@ -168,9 +168,9 @@ Change the port in `src/vision_fsm_agent/hil/server.py` (the `run()` call) and u
 
 ## Still Stuck?
 
-1. Check [existing issues](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues)
+1. Check [existing issues](https://github.com/evanzheng0107-dev/vision-fsm-agent/issues)
 2. Run the OSS readiness check: `python scripts/oss_readiness_check.py --verbose`
-3. Open a [bug report](https://github.com/evanzheng0107-dev/sword-legend-explorer/issues/new)
+3. Open a [bug report](https://github.com/evanzheng0107-dev/vision-fsm-agent/issues/new)
    with the output of:
    ```bash
    python --version
