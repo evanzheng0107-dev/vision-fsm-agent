@@ -5,8 +5,8 @@ type: software
 authors:
   - name: "Vision FSM Agent Contributors"
     orcid: "https://orcid.org/0000-0000-0000-0000"
-repository-code: "https://github.com/evanzheng0107-dev/sword-legend-explorer"
-url: "https://github.com/evanzheng0107-dev/sword-legend-explorer"
+repository-code: "https://github.com/evanzheng0107-dev/vision-fsm-agent"
+url: "https://github.com/evanzheng0107-dev/vision-fsm-agent"
 version: "0.1.0"
 date-released: "2026-06-29"
 license: MIT

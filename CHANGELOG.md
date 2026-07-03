@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Repository renamed** from `sword-legend-explorer` to `vision-fsm-agent`.
+- **All URLs updated** in README, CHANGELOG, pyproject.toml, CITATION.cff,
+  mkdocs.yml, CONTRIBUTING, docs, and config files.
+- **`.gitignore`** — Added `.ruff_cache/` to prevent linter cache from
+  being tracked.
+- **`examples/visual_grid_world/assets/README.md`** — Fixed stale path
+  reference after package reorganization.
+
 ## [0.1.1] - 2026-07-02
 
 ### Changed — v0.1.1 maintenance polish
@@ -186,6 +195,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/evanzheng0107-dev/sword-legend-explorer/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/evanzheng0107-dev/sword-legend-explorer/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/evanzheng0107-dev/sword-legend-explorer/releases/tag/v0.1.0
+[Unreleased]: https://github.com/evanzheng0107-dev/vision-fsm-agent/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/evanzheng0107-dev/vision-fsm-agent/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/evanzheng0107-dev/vision-fsm-agent/releases/tag/v0.1.0

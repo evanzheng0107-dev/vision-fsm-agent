@@ -39,8 +39,8 @@ If your contribution is in a grey area, open an issue and discuss it first.
 The fastest way to get a working development environment:
 
 ```bash
-git clone https://github.com/<your-username>/sword-legend-explorer.git
-cd sword-legend-explorer
+git clone https://github.com/<your-username>/vision-fsm-agent.git
+cd vision-fsm-agent
 make install   # installs the package + dev dependencies
 make assets    # generates demo template images
 make test      # verifies everything works
@@ -52,8 +52,8 @@ If you prefer not to use Make:
 
 ```bash
 # 1. Clone your fork
-git clone https://github.com/<your-username>/sword-legend-explorer.git
-cd sword-legend-explorer
+git clone https://github.com/<your-username>/vision-fsm-agent.git
+cd vision-fsm-agent
 
 # 2. Create a virtual environment
 python -m venv venv

@@ -6,8 +6,8 @@ blank_issues_enabled: false
 
 contact_links:
   - name: Security vulnerability report
-    url: https://github.com/evanzheng0107-dev/sword-legend-explorer/security/advisories/new
+    url: https://github.com/evanzheng0107-dev/vision-fsm-agent/security/advisories/new
     about: Found a security issue? Please report it privately via GitHub Security Advisories (see SECURITY.md). Do NOT open a public issue.
   - name: Question or discussion
-    url: https://github.com/evanzheng0107-dev/sword-legend-explorer/discussions
+    url: https://github.com/evanzheng0107-dev/vision-fsm-agent/discussions
     about: Have a question or want to discuss the project? Start a GitHub Discussion.

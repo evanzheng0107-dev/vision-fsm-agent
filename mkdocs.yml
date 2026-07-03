@@ -1,8 +1,8 @@
 site_name: Vision FSM Agent
 site_description: A lightweight Python framework for CV-driven automation agents with FSM control and HIL correction.
-site_url: https://github.com/evanzheng0107-dev/sword-legend-explorer
-repo_url: https://github.com/evanzheng0107-dev/sword-legend-explorer
-repo_name: evanzheng0107-dev/sword-legend-explorer
+site_url: https://github.com/evanzheng0107-dev/vision-fsm-agent
+repo_url: https://github.com/evanzheng0107-dev/vision-fsm-agent
+repo_name: evanzheng0107-dev/vision-fsm-agent
 edit_uri: edit/main/docs/
 
 theme:

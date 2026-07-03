@@ -4,6 +4,38 @@
 
 ---
 
+## P009 — 2026-07-03 16:30
+
+### Completed
+
+Repository rename and URL update.
+
+- **Merged PR #13**: Audit fixes (`.ruff_cache` gitignore, stale path).
+- **Repository URLs updated**: All references from `sword-legend-explorer`
+  to `vision-fsm-agent` in README, CHANGELOG, pyproject.toml, CITATION.cff,
+  mkdocs.yml, CONTRIBUTING, docs, and config files (32 references).
+- **CHANGELOG.md** updated with rename entry in `[Unreleased]`.
+- **PR #14** created and merged for URL updates.
+
+### Validation
+
+- pytest: **pass** (63 tests)
+- ruff check: **pass**
+- oss_readiness_check: **pass** (77 files, 0 risky)
+- git status: clean
+
+### Note
+
+GitHub repo rename (`sword-legend-explorer` -> `vision-fsm-agent`) requires
+manual action (PAT lacks admin scope). After rename, local remote URL
+should be updated to the new repo URL.
+
+### Next
+
+Phase 5-9: Create issues, verify releases, finalize application materials.
+
+---
+
 ## P008 — 2026-07-02 22:55
 
 ### Completed
@@ -141,7 +173,7 @@ Day 3 (partial): v0.1.0 release material preparation.
   user manually issues the next day's command.
 - All prior commits (5) have been successfully pushed to
   `origin/refactor/vision-fsm-agent` by the user.
-- PR link available: https://github.com/evanzheng0107-dev/sword-legend-explorer/pull/new/refactor/vision-fsm-agent
+- PR link available: https://github.com/evanzheng0107-dev/vision-fsm-agent/pull/new/refactor/vision-fsm-agent
 
 ### Next
 
