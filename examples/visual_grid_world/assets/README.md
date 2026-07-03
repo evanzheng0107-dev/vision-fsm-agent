@@ -15,6 +15,7 @@ All images in this directory are **programmatically generated** by
 python scripts/generate_demo_assets.py
 ```
 
-The drawing primitives live in `demo_app/visual_grid_world.py` and are
-shared with the `DemoEnvironment` renderer, guaranteeing that template
-matching finds the elements in rendered frames.
+The drawing primitives live in
+`src/vision_fsm_agent/envs/grid_world.py` and are shared with the
+`DemoEnvironment` renderer, guaranteeing that template matching finds
+the elements in rendered frames.

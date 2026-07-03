@@ -55,6 +55,7 @@ demo_frames/
 .pytest_cache/
 .coverage
 htmlcov/
+.ruff_cache/
 
 # Temporary files
 *.tmp
