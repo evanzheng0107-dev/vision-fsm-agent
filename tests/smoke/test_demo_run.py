@@ -16,7 +16,9 @@ def test_demo_runs_and_produces_expected_output():
         text=True,
         timeout=60,
     )
-    assert result.returncode == 0, f"Demo failed with exit code {result.returncode}: {result.stderr}"
+    assert result.returncode == 0, (
+        f"Demo failed with exit code {result.returncode}: {result.stderr}"
+    )
 
     output = result.stdout
 
