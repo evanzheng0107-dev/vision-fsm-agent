@@ -63,3 +63,6 @@ htmlcov/
 *.bak
 _test_*.txt
 push_result.txt
+
+# Prevent accidental asset copies
+src/assets/

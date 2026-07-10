@@ -21,6 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   links, cleaned up section numbering.
 - **`docs/demo.md`** — Updated expected output to match actual demo output.
 - **`examples/visual_grid_world/README.md`** — Updated expected output format.
+- **`examples/README.md`** — Restructured with quick-nav table, prerequisites,
+  FSM topology diagram, and "Verifying the examples" section with smoke test
+  instructions.
+- **`tests/smoke/test_demo_run.py`** — Improved assertions: now checks for
+  all expected output markers (header, step format, final status, progress
+  indicators).
+- **`tests/smoke/test_examples_independent.py`** — New smoke tests verifying
+  both examples run from their own directories, and the 35-step demo
+  completes all objectives. Smoke test count: 2 → 5, total tests: 63 → 66.
 
 ## [0.1.1] - 2026-07-02
 

@@ -117,7 +117,7 @@ pre-commit install
 Then use the Makefile for common tasks:
 
 ```bash
-make test      # Run the test suite (63 tests)
+make test      # Run the test suite (66 tests)
 make demo      # Run the demo
 make lint      # Run the linter
 make check     # Run the readiness check
@@ -294,7 +294,7 @@ environment (see [`.devcontainer/`](.devcontainer/devcontainer.json)).
 
 | Command | Description |
 |---------|-------------|
-| `make test` | Run pytest (63 tests) |
+| `make test` | Run pytest (66 tests) |
 | `make test-cov` | Run pytest with coverage |
 | `make demo` | Run the synthetic demo |
 | `make lint` | Run ruff linter |
@@ -350,7 +350,7 @@ details and [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
 - ✅ Core FSM + Vision + HIL framework
 - ✅ Synthetic demo environment
 - ✅ Local + optional cloud decision agents
-- ✅ 63-test pytest suite with CI
+- ✅ 66-test pytest suite with CI
 - ✅ Custom FSM example with fallback path demonstration
 - ✅ Standard Python package layout (src/vision_fsm_agent/)
 

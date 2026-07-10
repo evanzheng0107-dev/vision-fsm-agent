@@ -15,7 +15,7 @@ control and human-in-the-loop correction.
 - **Latest release**: v0.1.1
 - **Tags**: v0.1.0, v0.1.1
 - **Python**: 3.9+
-- **Tests**: 63 (all passing, CI integrated)
+- **Tests**: 66 (all passing, CI integrated)
 
 ## Architecture
 
@@ -35,7 +35,7 @@ The framework consists of four independent modules:
 - **Releases**: v0.1.0 and v0.1.1 tagged with GitHub Releases
 - **PRs merged**: 5 (refactor, 2 dependabot, v0.1.1 polish, docs finalization)
 - **Issues**: 6 open (#5–#10) for roadmap and maintenance
-- **Tests**: 63 passing (unit + integration + smoke)
+- **Tests**: 66 passing (unit + integration + smoke)
 - **CI**: test (Python 3.9–3.13 matrix) + lint (ruff/mypy/bandit)
 - **OSS readiness**: 77 files, 0 risky words
 

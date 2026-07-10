@@ -4,7 +4,39 @@
 
 ---
 
-## P009 — 2026-07-03 16:30
+## P010 — 2026-07-10 12:00
+
+### Completed
+
+Day 7: Examples and test stability improvements.
+
+- **Improved `tests/smoke/test_demo_run.py`**: Enhanced assertions to check
+  for all expected output markers (header, step format, progress indicators,
+  final status fields). Previously only checked return code and basic
+  output presence.
+- **Added `tests/smoke/test_examples_independent.py`** (3 new tests):
+  - `test_demo_runs_from_examples_dir` — verifies grid world demo runs
+    when invoked directly from `examples/visual_grid_world/`
+  - `test_custom_fsm_runs_from_examples_dir` — verifies custom FSM runs
+    from its own directory
+  - `test_demo_runs_via_arg_longer` — verifies 35-step demo completes
+    all objectives (`All items collected and buttons pressed. Done!`)
+- **Rewrote `examples/README.md`**: Added quick-nav table, prerequisites,
+  FSM topology diagram, "Verifying the examples" section with smoke test
+  instructions, and links to roadmap/issues.
+- **Updated README.md**: Test count 63 → 66.
+- **Updated CHANGELOG.md**: Added Day 7 entries.
+
+### Validation
+
+- pytest: **pass** (66 tests, +3 new smoke tests)
+- ruff check: **pass**
+- oss_readiness_check: **pass** (78 files, 0 risky)
+- git status: clean
+
+### Next
+
+Day 8: address open issues or continue with v0.2.0 feature planning.
 
 ### Completed
 
